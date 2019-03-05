@@ -1,0 +1,128 @@
+﻿
+global TPpaymentCode
+global LastName
+global DOB
+global TrainingProvider
+
+Repeat until ImageFound(text:"Reinstate online now", waitFor:30)
+	if the repeatIndex > 60 then Throw "Lapsed subscription hasn't come through to WEB form CRM" 
+	TypeText F5	
+End repeat
+
+click (text: "Reinstate online now", waitFor: 10)
+
+WaitFor 40, text:"Reinstate on an AAT"
+
+//Choosing qualification page
+
+Repeat until ImageFound(text:"AAT Accounting Qualifications", waitFor:30)
+	if the repeatIndex > 60 then Throw "Student is not able REINSTATE on AQ - owing to Drupal datatable still has an active AQ qual" 
+	TypeText F5	
+End repeat
+
+click (text:"AAT Accounting Qualifications", waitFor:20)
+
+click (text:"AAT Accounting Qualifications 2016", waitFor:20)
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Existing personal details page
+
+if ImageFound(text:LastName, waitFor:40) and if ImageFound(text:DOB, waitFor:20)then LogSuccess "PASS: Existing details are correct" else LogError "FAIL: Existing details are INCORRECT"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("BottomRightQuadrant")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//AAT Accounting Qualifications 2016  / Choosing TP page
+
+WaitFor 40, text:"Select your training provider"
+
+Run "CommonWebFunctions" 's DropDown "Training provider" , TrainingProvider
+
+Run "CommonWebFunctions" 's DropDown "Start at" , "Foundation"
+
+Run "CommonWebFunctions" 's DropDown "tended end" , "Professional"
+
+Run "CommonWebFunctions" 's RadioBtn "distance learning" , "No"
+
+TypeText tabKey
+TypeText spacebar
+
+Run "CommonWebFunctions" 's RadioBtn "AAT fees" , "Self"
+
+Run "CommonWebFunctions" 's RadioBtn "AAT training" , "Self"
+
+Run "CommonWebFunctions" 's RadioBtn "Are you training" , "No"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Your education page
+
+WaitFor 40, text:"Which of the following"
+
+Run "CommonWebFunctions" 's DropDown "Which of the following" , "mal qualification"
+
+Run "CommonWebFunctions" 's DropDown "Learning difficulties" , "I do not"
+
+Run "CommonWebFunctions" 's RadioBtn "intend to become" , "Yes"
+
+Run "CommonWebFunctions" 's RadioBtn "intend to continue" , "Yes"
+
+Run "CommonWebFunctions" 's DropDown "Reason for r" , "Oversight"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Your existing employment record
+
+WaitFor 40, text:"Your existing employment record"
+
+Run "CommonWebFunctions" 's DropDown "Your current situation" , "I am employed"
+
+click (text: "Your existing employment record", WaitFor: 10)
+
+Run "CommonFunctions" 's ScrollDownuntilText "Continue"
+
+Run "CommonWebFunctions" 's RadioBtn "full time" , "Part time"
+
+Run "CommonWebFunctions" 's RadioBtn "undertake accountancy" , "No"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Declaration page
+
+WaitFor 40, text:"Declaration"
+
+click (Text:  "I agree to the declaration",waitfor:40)
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Selected qualifications page
+
+WaitFor 40, text:"Selected qualifications"
+
+Run "CommonWebFunctions" 's TextBoxes "Payment code" , TPpaymentCode
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+If ImageFound(text:"Payment success", waitFor:60) then LogSuccess "User is able to successfully Reinstate as a Student through the WEB" else LogError "User is NOT able to successfully Reinstate as a Student through the WEB"
+
+//Payment success page
+
+Run "CommonFunctions" 's ScrollDownuntilText "Finish"
+
+click (Text:  "Finish",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+WaitFor 40, (text:"How to start studying", validCharacters:"*",validWords:"*")
+
+wait 2
+
+
+
+
+
+
+
+
+
+
+
+

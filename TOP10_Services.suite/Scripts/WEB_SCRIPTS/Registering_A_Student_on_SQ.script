@@ -1,0 +1,259 @@
+﻿
+
+
+Params email,weblastname
+
+global EmployersName
+global DOB
+global TrainingProvider
+
+//Registering a Student on AQ 
+click (Text: "Register",waitfor:40)
+
+(*TypeText controlKey,l
+// entering student registration page
+TypeText "https://uat-web.aws.aat.org.uk/register/Student"
+TypeText  returnKey*)
+
+WaitFor 40, text:"Start your application"
+
+wait 2
+
+click (Text: "Register now",waitfor:40)
+
+WaitFor 40, text:"Start or resume your registration"
+
+Run "CommonFunctions" 's ScrollDownuntilText "Continue"
+
+//Run "CommonWebFunctions" 's TextBoxes "Email" , email
+
+Click imagelocation(text:"Confirm email",caseSensitive: YES,ValidCharacters:"*",validWords:"*",waitfor:20)+(5,30)
+TypeText shiftKey,tabKey
+TypeText email
+
+Run "CommonWebFunctions" 's TextBoxes "Confirm email" , email
+
+//Run "CommonWebFunctions" 's TextBoxes "Password" , "--Gue55Wh0"
+
+Click imagelocation(text:"Confirm password",caseSensitive: YES,ValidCharacters:"*",validWords:"*",waitfor:20)+(5,30)
+TypeText shiftKey,tabKey
+TypeText "--Gue55Wh0"
+
+Run "CommonWebFunctions" 's TextBoxes "Confirm password" , "--Gue55Wh0"
+
+click (Text:  "Your details may also",waitfor:40)
+
+wait 2
+
+click (Text:  "Continue",waitfor:40)
+
+//Choosing qualification page
+
+click (Text:  "AAT Bookkeeping",waitfor:40)
+
+click (Text:  "Access Award in Bookkeeping",waitfor:40)
+
+click (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Your personal details page
+
+Run "CommonWebFunctions" 's DropDown "Title" , "Mr"
+
+Run "CommonWebFunctions" 's TextBoxes "First name" , "Automation"
+
+Run "CommonWebFunctions" 's TextBoxes "Last name" , weblastname
+
+Run "CommonWebFunctions" 's RadioBtn "Gender" , "Male"
+
+//Generating Dynamic DOB aged 21 years
+put formattedTime ("%d/%m/%Y", today) into tempDOB
+put tempDOB - 21 year into DOB -- need to debug *****
+log DOB
+
+Run "CommonWebFunctions" 's TextBoxes "Date of birth" , DOB
+
+click (Text:  "Gender",waitfor:40)
+
+Run "CommonWebFunctions" 's RadioBtn "s English" , "Yes"
+
+Run "CommonWebFunctions" 's DropDown "Ethnic back" , "White"
+
+Run "CommonFunctions" 's ScrollDownuntilText "Contact details"
+
+Run "CommonWebFunctions" 's TextBoxes "Postcode" , "TW7 6TR"
+
+click (Text:  "Find address",waitfor:40)
+
+click (Text:  "71",waitfor:40)
+
+wait 2
+
+Run "CommonWebFunctions" 's DropDown "County" , "Avon"
+
+click (Text:  "Address",waitfor:40)
+
+Run "CommonFunctions" 's ScrollDownuntilText "Continue"
+
+Run "CommonWebFunctions" 's TextBoxes "Phone" , "564321897"
+
+Run "CommonWebFunctions" 's RadioBtn "Do you have a" , "No"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Selecting a training provider page
+
+WaitFor 40, text:"Select your training provider"
+
+Run "CommonWebFunctions" 's DropDown "Training provider" , TrainingProvider
+
+Run "CommonWebFunctions" 's RadioBtn "distance learning" , "Yes"
+
+TypeText tabKey
+TypeText spacebar
+
+Run "CommonWebFunctions" 's RadioBtn "AAT fees" , "Self"
+
+Run "CommonWebFunctions" 's RadioBtn "AAT training" , "Self"
+
+Run "CommonWebFunctions" 's RadioBtn "Are you training" , "No"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Your education page
+
+WaitFor 40, text:"Which of the following"
+
+Run "CommonWebFunctions" 's DropDown "Which of the following" , "No formal"
+
+Run "CommonWebFunctions" 's DropDown "Learning difficulties" , "I do not"
+
+Run "CommonWebFunctions" 's DropDown "How you heard" , "another"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Your employment details
+
+WaitFor 40, text:"Your current situation"
+
+Run "CommonWebFunctions" 's DropDown "Your current situation" , "I am employed or"
+
+Run "CommonWebFunctions" 's RadioBtn "full time" , "Part time"
+
+Run "CommonWebFunctions" 's RadioBtn "undertake acc" , "No"
+
+Run "CommonFunctions" 's ScrollDownuntilText "Start date"
+
+//Generating a dynamic Employer Name
+
+Put "NLC Employer"&&today's date into EmployersName
+Run "CommonWebFunctions" 's TextBoxes "Employer name" , EmployersName
+
+Run "CommonWebFunctions" 's TextBoxes "Postcode" , "EC1V 2NX"
+
+click (Text:  "Find address",waitfor:40)
+
+wait 2
+
+Run "CommonFunctions" 's ScrollDownuntilText "Capital Office"
+
+click (Text:  "Capital Office",waitfor:40)
+
+Run "CommonFunctions" 's ScrollDownuntilText "Continue"
+
+Run "CommonWebFunctions" 's TextBoxes "Your job title" , "Jr Accountant"
+
+//Generating dynamic start date for employment which is 1 year today
+put formattedTime ("%d/%m/%Y", today) into tempEmpStartDate
+put tempEmpStartDate - 1 year into StartDate
+log StartDate
+Run "CommonWebFunctions" 's TextBoxes "Start date" , StartDate 
+
+click (Text:  "Town",waitfor:40)
+
+Run "CommonWebFunctions" 's TextBoxes "Your department" , "Finance"
+
+Run "CommonWebFunctions" 's TextBoxes "Phone" , "897564312"
+
+Run "CommonWebFunctions" 's RadioBtn "Do you want your" , "No"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Declaration page
+
+click (Text:  "I agree to the declaration",waitfor:40)
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Using your personal data page
+
+Run "CommonFunctions" 's ScrollDownuntilText "No, thank you"
+
+click (Text:  "No, thank you",waitfor:40)
+
+Run "CommonFunctions" 's ScrollDownuntilText "Continue"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Selected qualifications page
+
+WaitFor 40, text:"Selected qualifications"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Payment page
+
+WaitFor 40, text:"card"
+
+if ImageFound(text:"Amount",waitFor: 25) then 
+	click (text:"Amount") 
+else
+	TypeText F5
+end if
+if ImageFound(text:"Amount",waitFor: 5) then click (text:"Amount") 
+TypeText tabKey
+TypeText "Current"
+TypeText tabKey
+TypeText rightArrow
+TypeText tabKey
+wait 2
+TypeText "1000010000000007"
+TypeText tabKey
+TypeText "02"
+TypeText tabKey
+TypeText "2020"
+TypeText tabKey
+wait 3
+TypeText "125"
+TypeText tabKey
+TypeText tabKey
+wait 3
+TypeText spacebar //continue
+
+If ImageFound(text:"Payment success", waitFor:60) then LogSuccess "User is able to successfully register as a Student through the WEB" else LogError "User is NOT able to successfully register as a Student through the WEB"
+
+//Payment success page
+
+Run "CommonFunctions" 's ScrollDownuntilText "Finish"
+
+click (Text:  "Finish",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+WaitFor 40, (text:"How to start studying", validCharacters:"*",validWords:"*")
+
+wait 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

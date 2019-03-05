@@ -1,0 +1,41 @@
+﻿
+Click (Text: "ADD NEW MIP SERVICE", caseSensitive: On, waitFor: 40)
+
+WaitFor 40, text:"General"
+
+wait 2
+
+Click text:"MIP Service",ValidCharacters:"*", waitFor:20
+
+wait 2
+
+WaitFor 40, text:"Dates"
+
+wait 2
+
+Set the SearchRectangle to ((40,255),(660,560))
+Click text:"Contact", waitFor:10
+TypeText tabKey
+TypeText "Bookkeeping"
+wait 1
+TypeText returnKey
+wait 2
+TypeText returnKey
+set the SearchRectangle to ()
+
+wait 2
+
+WaitFor 40, text:"Dates"
+
+//Run "CommonCRMFunctions" 's CRM_TextBoxes "MIP Service", "Bookkeeping", "Enter"
+
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "MIP Service Area", "Accountancy", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_DropDown "Service Status", "Approved"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Approved date", today
+
+Click (Text: "CLOSE",ValidCharacters:"*", caseSensitive: On, waitFor: 40)
+wait 1
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))

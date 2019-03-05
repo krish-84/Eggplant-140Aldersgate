@@ -1,0 +1,69 @@
+﻿
+
+
+to handle TextBoxes Label,Data
+	put imagelocation(text:label, caseSensitive: YES, ValidCharacters:"*", waitfor:20)+(-110,-95) into TL
+	put imagelocation(text:label, caseSensitive: YES,ValidCharacters:"*", waitfor:20)+(1100,100) into BR 
+	Click imagelocation(text:label,caseSensitive: YES,ValidCharacters:"*", waitfor:20,searchrectangle:(TL,BR))+(5,30)
+	typetext controlKey,"a"
+	typetext data
+	Click imagelocation(text:label, caseSensitive: YES, ValidCharacters:"*", waitfor:20)+(0,-15)
+end TextBoxes
+
+//,validWords:"*"
+to handle DropDown Label, data
+	put imagelocation(text:label,ValidCharacters:"*",caseSensitive: On,waitfor:20)+(-150,-500) into TL
+	put imagelocation(text:label,ValidCharacters:"*",caseSensitive: On,waitfor:20)+(600,700) into BR 
+	Click imagelocation(text:label,ValidCharacters:"*",caseSensitive: On,waitfor:20)+(5,30)
+	if ImageFound(text:Data,searchrectangle:(TL,BR), caseSensitive:On,waitFor:3) then
+		Click (text:Data, TextDifference:0,searchrectangle:(TL,BR),caseSensitive:On,waitfor:20)
+	Else 
+		repeat until imagefound(Text: Data,ValidCharacters:"*", TextDifference:0,searchrectangle:(TL,BR),caseSensitive:On,waitFor:2) 
+			if the repeatIndex > 15 then Throw "Text not found" 
+			ScrollWheelDown 1 //Scrolls 4 increments		
+			wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+		end repeat
+		Click (text:Data, TextDifference:0,searchrectangle:(TL,BR),caseSensitive:On,waitfor:20)
+	End If
+	click imagelocation(text:label,ValidCharacters:"*", TextDifference:0,caseSensitive: On,waitfor:10)+(0,-15)
+end DropDown
+
+
+to handle RadioBtn label, data
+	put imagelocation(text:label,ValidCharacters:"*", TextDifference:0,caseSensitive: On,waitfor:20)+(-245,0) into TL
+	put imagelocation(text:label,ValidCharacters:"*", TextDifference:0,caseSensitive: On,waitfor:20)+(500,95) into BR
+	Click(text:data,IgnoreSpaces:YES, caseSensitive:On,searchrectangle:(TL,BR),waitfor:20)
+end RadioBtn
+
+to handle ConfirmAdditonalQualificationOnStudentProfile with qual
+	Repeat until ImageFound(text:"Change to another role", waitFor:15)
+		if the repeatIndex > 60 then Throw "additional qualification has been accepted by CRM but the update flag hasn't come through to Drupal yet"
+		TypeText F5
+	End repeat
+	click (Text: "Change to another role", waitFor: 5)
+	click imagelocation(Text: "Your current view", validCharacters:"*",waitFor: 5)+(0,30)
+	WaitFor 40, text: qual	
+end ConfirmAdditonalQualificationOnStudentProfile	
+
+to handle ErrorHandlingOnTextBoxes Label,Data,ExpErrorMsg
+	put imagelocation(text:label, caseSensitive: YES, ValidCharacters:"*", waitfor:20)+(-110,-95) into TL
+	put imagelocation(text:label, caseSensitive: YES,ValidCharacters:"*", waitfor:20)+(1100,100) into BR 
+	Click imagelocation(text:label,caseSensitive: YES,ValidCharacters:"*", waitfor:20,searchrectangle:(TL,BR))+(5,30)
+	typetext controlKey,"a"
+	typetext data
+	Click imagelocation(text:label, caseSensitive: YES, ValidCharacters:"*", waitfor:20)+(0,-15)
+end ErrorHandlingOnTextBoxes
+
+to handle AngularCountryTextBox Label,Data
+	put imagelocation(text:label, caseSensitive: YES, ValidCharacters:"*", waitfor:20)+(-110,-95) into TL
+	put imagelocation(text:label, caseSensitive: YES,ValidCharacters:"*", waitfor:20)+(1100,100) into BR 
+	Click imagelocation(text:label,caseSensitive: YES,ValidCharacters:"*", waitfor:20,searchrectangle:(TL,BR))+(5,30)
+	typetext controlKey,"a"
+	typetext data
+	TypeText downArrow
+	TypeText returnKey	
+	Click imagelocation(text:label, caseSensitive: YES, ValidCharacters:"*", waitfor:20)+(0,-15)
+end AngularCountryTextBox
+
+
+

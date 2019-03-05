@@ -1,0 +1,15 @@
+﻿
+global POnumber
+
+//Generating a dynamic po number and storing in global variable
+Put "Automation"&today's date into POnumber
+//Using scroll function to scroll down to find an image
+Run CommonBrowserFunctions's ScrollUpuntilText "agree to the following"
+// Agreeing to the terms
+Click (Text: " agree to the following", waitFor: 10)
+//Using scroll function to scroll down to find an image
+Run "CommonBrowserFunctions" 's ScrollDownuntilImage "WEB/ConfirmationAndPaymentPage/Disabled_Submit_Button"
+// Entering PO number
+Run CommonBrowserFunctions's TextBoxes "PO number", POnumber
+// Clicking on Submit button
+Click (Text: "Submit", waitFor: 10)

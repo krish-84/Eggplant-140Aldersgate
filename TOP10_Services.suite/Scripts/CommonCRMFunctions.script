@@ -1,0 +1,161 @@
+﻿
+
+
+// Function to search for a record using ID or Lastname
+to handle SearchByIDorName with ID
+	wait 3
+	click "CRM/CommonObjects/Search_Icon"
+	wait 3
+	TypeText ID
+	wait 3
+	TypeText returnKey
+	wait 2
+	repeat until ImageFound(imageName:"CRM/SearchPage/Contact_Card_Icon", waitFor:30) or ImageFound(imageName:"CRM/SearchPage/Organisation_Card_Icon", waitFor:15)	
+		if the repeatIndex > 60 then Throw "Payload hasnt come through to CRM" 
+		click "CRM/CommonObjects/Search_Icon"
+		wait 1
+		TypeText controlKey,a
+		TypeText ID
+		TypeText returnKey
+		wait 2
+	end repeat	
+	if ImageFound(imageName:"CRM/SearchPage/Contact_Card_Icon", waitFor:1) then Click (Image: "CRM/SearchPage/Contact_Card_Icon")	
+	if ImageFound(imageName:"CRM/SearchPage/Organisation_Card_Icon", waitFor:1) then Click (Image: "CRM/SearchPage/Organisation_Card_Icon")
+	wait 1
+	WaitFor 20, text:"General"	
+end SearchByIDorName
+
+// Function to navigae from the TOP menu bar of an active record
+to handle NavigateFromTopMenuTo with EntityName
+	Put EveryImageLocation(ImageName:"CRM/CommonObjects/Right_Arrow_Icon_On_TopMenu",searchrectangle:((0,50),(1910,100)), waitFor:5) into FoundImages
+	If ImageFound(text:"Contact",searchrectangle:((0,50),(1910,100)), waitFor:5) or ImageFound(text:"Organ",searchrectangle:((0,50),(1910,100)), waitFor:5) then
+		log FoundImages	
+		Repeat until the number of items in FoundImages is 2
+			Put EveryImageLocation(ImageName:"CRM/CommonObjects/Right_Arrow_Icon_On_TopMenu",searchrectangle:((0,50),(1910,100)), waitFor:5) into FoundImages
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			click (50,117)
+			wait 2
+		End repeat	
+		Repeat until ImageFound(text:"Common",searchRectangle:((5,90), (1910,450)), waitFor:5)
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			Click item 2 of FoundImages
+		End repeat		
+	Else 
+		log FoundImages	
+		Repeat until the number of items in FoundImages is 1
+			Put EveryImageLocation(ImageName:"CRM/CommonObjects/Right_Arrow_Icon_On_TopMenu",searchrectangle:((0,50),(1910,100)), waitFor:5) into FoundImages
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			click (50,117)
+			wait 2
+		End repeat	
+		Repeat until ImageFound(text:"Common",searchRectangle:((5,90), (1910,450)), waitFor:5)
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			Click item 1 of FoundImages
+		End repeat			
+	End if
+	WaitFor 20, text: EntityName,searchRectangle:((5,90), (1910,450))
+	wait 2
+	Click (Text: EntityName,searchRectangle:((5,90), (1910,450)))
+	WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+end NavigateFromTopMenuTo
+
+// Function to confirm if the prog reg has comethrough and it refreshes the screen every 30 secs for a maximum of 6mins
+to handle ConfirmProgRegPayload with ProgRegName
+	repeat until ImageFound(Text: ProgRegName,TextDifference:1, waitFor:30)	
+		if the repeatIndex > 60 then Throw "Prog Reg Payload hasnt come through to CRM" 
+		TypeText F5
+		wait 5
+	end repeat	
+end ConfirmProgRegPayload
+
+
+
+// Function to confirm if the prog reg has comethrough and it refreshes the screen every 30 secs for a maximum of 6mins
+to handle ConfirmProgRegPayloadForSameDayReinstated with ProgRegName
+	//Put EveryImageLocation(text:ProgRegName, waitFor:5) into FoundImages
+	repeat until the number of items in FoundImages is 2
+		Put EveryImageLocation(text:ProgRegName, waitFor:15) into FoundImages
+		if the repeatIndex > 60 then Throw "Prog Reg Payload hasnt come through to CRM" 
+		TypeText F5
+		wait 5
+	end repeat	
+end ConfirmProgRegPayloadForSameDayReinstated
+
+// Function to read the memberID of a contact
+to handle ReadMemberID
+	global MemberID
+	global LoginID
+	set MemberID to ReadText(ImageLocation("CRM/CommonObjects/MemberID"),validPattern: "[0-9]+")
+	delete the first character of MemberID
+	Log MemberID
+	put MemberID&"@aat-test.org.uk" into LoginID
+	Log LoginID
+end ReadMemberID
+
+
+// Function to payment and payment method on View transaction
+to handle ValidateViewTransaction
+	WaitFor 40, text:"VIEW TRANSACTIONS"	
+	click (text: "VIEW TRANSACTIONS", waitFor: 40)
+	WaitFor 40, text:"Financial"
+	click (text: "All Outstanding", waitFor: 40)	
+end ValidateViewTransaction
+
+// Function to CLOSE View transaction
+to handle ExitViewTransaction
+	RightClick (Text: "Webpage Dialog", waitFor: 40)
+	click (text: "Close", caseSensitive:YES,SearchRectangle: (ScreenPart("VerticalMiddle")), TextDifference:1, waitFor: 4)
+end ExitViewTransaction
+
+
+//Function to Click on text boxes and enter the desired value
+to handle CRM_TextBoxes Label,Data,dropdown
+	put imagelocation(text:label,ValidCharacters:"*", TextDifference:1,caseSensitive: On,waitfor:20)+(-250,-100) into TL
+	put imagelocation(text:label,ValidCharacters:"*",TextDifference:1,caseSensitive: On,waitfor:20)+(600,220) into BR 
+	Log TL && BR
+	Click imagelocation(text:label,waitfor:20,ValidCharacters:"*",TextDifference:1,caseSensitive: On,searchrectangle:(TL,BR))+(150,0)
+	wait 1
+	//typetext controlKey,"a"
+	if Data contains "MIP Employment" then
+		typetext controlKey,"a"
+		typetext Data
+	else
+		typetext Data
+	End if
+	//typetext Data
+	If dropdown = "Enter" then
+		wait 1
+		Typetext returnKey
+		wait 2
+		set the SearchRectangle to (TL,BR)
+		WaitFor 40, (text:"0"), (text:"1"),(text:"2"),(text:"3"),(text:"4"),(text:"5"),(text:"6"),(text:"7"),(text:"8"),(text:"9")
+		set the SearchRectangle to ()
+		Typetext returnKey
+		wait 1		
+	End IF
+end CRM_TextBoxes
+
+to handle ClickTheNameOnTheForm
+	Global LastName
+	Repeat until ImageFound(text: "Customer Address", ValidCharacters:"*", waitFor:5)
+		if the repeatIndex > 6 then Throw "Unable to go back to the contact page" 
+		Click (Text: LastName,  ValidCharacters:"*",TextDifference:2,searchrectangle:((20,240),(1000,1000)),waitFor: 10)
+	End repeat	
+	//Click (Text: LastName, waitFor: 10, ValidCharacters:"*",TextDifference:4,searchrectangle:((20,240),(600,600)))
+	WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	wait 3
+	//WaitFor 20, (Text: LastName, ValidCharacters:"*",TextDifference:4,searchrectangle:((20,240),(600,600)))
+	//WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+	wait 1
+end ClickTheNameOnTheForm
+
+
+
+
+
+
+
+
+
+

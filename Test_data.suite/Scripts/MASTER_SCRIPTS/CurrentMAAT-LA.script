@@ -1,0 +1,111 @@
+﻿Try
+	
+	
+	//Execution time is approx - 33 minutes for each record
+	
+	Set Number_of_data_required to "1" --set the number to how much data you want to create
+	Set Department to "QA" --Change the name of the department for whom the data needs to be created for e.g. change "QA" to "COT" for customer operations
+	
+	//*****Do not change anything below this line******************************************************************************************
+	
+	Repeat Number_of_data_required times  --
+		Global LastName
+		Global MemberType
+		Global TestDataType
+		
+		//Setting up dynamic data
+		put a..z into Letters -- Store the alphabet in a variable using a range
+		put random(3,4) into NewNameLength -- Use the random function to randomly select a name length
+		repeat NewNameLength times -- Repeat for each character in the new customer name
+			put any item of letters after NewName -- Create a new name using random letters	
+		end repeat
+		
+		Set MemberType to "-MAAT-LA-" --Dont change this
+		
+		
+		Set FirstName to Department & "-Data" --Dont change this
+		Set LastName to Department & MemberType & NewName --Dont change this
+		Set Email to "test@aat-test.org.uk" --Dont change this
+		Set TestDataType to Department & MemberType --Dont Change this
+		Log LastName
+		
+		Log "Creating a MAAT Member"
+		
+		Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","http://uatcrm.aat.org.uk/MasterTestData/main.aspx" //Launching MasterTestData CRM 
+		
+		Run "CreateNewContact" FirstName, LastName, Email
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Membership Applic"
+		
+		Run "CreateNewMembershipApplication" "MAAT" , "Current student - Online - L4 after 3 months but less than 12 months"
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Prerequisite"
+		
+		Run "ApprovingPreRequisites"
+		
+		Run "ApproveMembershipApplication"
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Work Experience"
+		
+		Run "AddingWorkExperience" "Personal Effectiveness", "Behaving ethically"
+		
+		Run "AddingWorkExperience" "Personal Effectiveness", "Commitment to Continuing Professional Development (CPD)"
+		
+		Run "AddingWorkExperience" "Personal Effectiveness", "Communication Skills"
+		
+		Run "AddingWorkExperience" "Personal Effectiveness", "Managing time and workload"
+		
+		Run "AddingWorkExperience" "Personal Effectiveness", "Teamwork"
+		
+		Run "AddingWorkExperience" "Technical", "Technical Competence"
+		
+		Run "CommonCRMFunctions" 's ClickTheNameOnTheBanner
+		
+		//End of MAAT journey and Beginning of adding Licensed Accountant membership
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Membership Applic"
+		
+		Run "CreateNewMembershipApplication" "MAAT" , "MIP MAAT"
+		
+		Run "CommonCRMFunctions" 's ClickTheNameOnTheForm 
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "MIP Service"
+		
+		Run "AddMIP-Services"
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Employment"
+		
+		Run "AddEmployment"
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "MIP Details"
+		
+		Run "AddMIP-Details"
+		
+		Run "CommonCRMFunctions" 's ClickTheNameOnTheForm 
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Membership Applic"
+		
+		Run "DbClickNewMembershipApplication"
+		
+		Run "AddMembershipOption" "Licensed Accountant (Reduced)"
+		
+		Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Prerequisite"
+		
+		Run "ApprovingPreRequisites"
+		
+		Run "ApproveMembershipApplication"		
+		
+		//Closing the browser
+		Run "CommonBrowserFunctions" 's CloseBrowser
+		
+		
+	End repeat
+	
+	Catch exception
+	CaptureScreen	
+	put the result
+	Run "CommonBrowserFunctions" 's CloseBrowser	
+	throw exception
+	
+End try
+

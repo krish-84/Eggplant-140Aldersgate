@@ -1,0 +1,7 @@
+﻿
+Params CentreName
+
+//Clicking on the drupal centre picker dropdown
+Click (Text: "Please select from the list", waitFor:20)
+//clicking on the Centre as per the test
+Click (Text: CentreName, waitFor: 10)

@@ -1,0 +1,32 @@
+﻿
+Set FirstName to ""
+Set LastName to ""
+Set EmailID to ""
+Set AgeRange to ""
+
+
+
+
+
+
+Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk/enquire-with-aat"
+
+Run "CommonWebFunctions" 's DropDown "Title" , "Mr"
+
+Run "CommonWebFunctions" 's TextBoxes "First name" , "Automation"
+
+Run "CommonWebFunctions" 's TextBoxes "Last name" , "OrderInfoPack"
+
+Run "CommonWebFunctions" 's TextBoxes "Email" , "kjahfdsa@dsafdsakj.co"
+
+Run "CommonWebFunctions" 's DropDown "Age range" , "19 to 25 years"
+
+Run "CommonFunctions" 's ScrollDownuntilText "About AAT"
+
+Run "CommonWebFunctions" 's AngularCountryTextBox "Country" , "United Kingdom"
+
+Run "CommonWebFunctions" 's TextBoxes "Postcode" , "IG6 1LT"
+
+Run "CommonWebFunctions" 's TextBoxes "Phone number" , "1234567890"
+
+click (Text: "Submit enquiry")

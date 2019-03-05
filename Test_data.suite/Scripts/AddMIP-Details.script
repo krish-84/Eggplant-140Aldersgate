@@ -1,0 +1,116 @@
+﻿
+Global LastName	
+Global FirstName
+
+wait 5
+
+Click (Text: "ADD NEW MIP DETAIL", caseSensitive: On, waitFor: 40)
+
+WaitFor 40, text:"MIP Employment Detail"
+
+wait 3
+
+Click text:"Partners",ValidCharacters:"*", waitFor:20
+
+wait 2
+
+WaitFor 40, text:"MIP Employment Detail"
+
+Run "CommonCRMFunctions" 's CRM_DropDown "Business Type", "Sole Trader"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Name", "MIP Employment @ QAemployer.2"
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Practice details"
+
+Click text:"Practice details", waitFor:10
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Other income derived"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "First year end", today - 1 year
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Estimated year 1", "10000"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Hours per month", "8"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Business set up date", today - 1 year
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Your clients"
+
+Click text:"Your clients", waitFor:10
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Engagement"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Sole traders (inc", "2"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Partnerships (inc", "2"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Limited liability", "2"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Limited companies", "2"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Charities", "2"
+
+Run CommonBrowserFunctions's ScrollDownuntilText "CPD"
+
+repeat until imagefound (Text:"Money Laundering Su", waitFor: 5)
+	if the repeatIndex > 15 then Throw "Image not found" 
+	Click (Text: "Money Laundering", caseSensitive: On, waitFor: 5)	
+end repeat
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Qualifications"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Money Laundering Su", "AAT", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "No of partnersprovid", "1"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "No of partners not", "0"
+
+Put today - 10 days into MLdate
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "AAT from", MLdate
+
+Set the SearchRectangle to ((700,500),(1800,1000))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "AAT", MLdate + 1 year
+set the SearchRectangle to ()
+
+Run "CommonCRMFunctions" 's CRM_DropDown "Title", "Mr"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Forenames and", FirstName && LastName
+
+//Run "CommonCRMFunctions" 's CRM_TextBoxes "Contact n", "0123456789" --
+
+Click (Text: "CLOSE", ValidCharacters:"*",caseSensitive: On, waitFor: 40)
+
+wait 3
+
+Repeat until not ImageFound (Text: "CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor: 1)
+	if the repeatIndex > 6 then Throw "Unable to close the form" 
+	wait 2
+	if ImageFound(text:"CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor:1) then Click (Text: "CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor: 1)
+	wait 3
+End repeat
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 1
+
+Run "CommonCRMFunctions" 's ClickTheNameOnTheBanner 
+
+(*Click (Text: "CLOSE", caseSensitive: On, waitFor: 40)
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))*)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

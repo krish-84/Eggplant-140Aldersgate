@@ -1,0 +1,128 @@
+﻿
+// Function to launch a borwser
+to handle LaunchBrowserWithURL with browser,url
+	(*TypeText  controlKey, shiftKey, escapeKey
+	click (Text: "Processes", waitFor: 20)
+	if ImageFound(Text: "iexplore.exe", WaitFor: 3) then
+		click (Text: "iexplore.exe", WaitFor: 5)
+		TypeText tabKey
+		TypeText tabKey
+		TypeText tabKey
+		TypeText spacebar
+		TypeText spacebar	
+		wait 2
+	end if
+	TypeText escapeKey*)	
+	Set CRMPassword to "--Gue55Wh3"
+	TypeText  windowsKey,"r"
+	TypeText  browser&& url,return
+	//waitfor 20,"CommonBrowserObjects/IE_Browser/refreshBTN"
+	if browser contains "explore" then
+		if ImageFound(imageName: "CommonBrowserObjects/IE_Browser/MaximiseIEbrowser", waitFor: 1) then 
+			Click "CommonBrowserObjects/IE_Browser/MaximiseIEbrowser"
+		end if
+	End if
+	//wait 5
+	if url contains "crm" then
+		if imageFound(imageName:"CRM/CommonObjects/CredentialsPopUp", waitFor:5) then 
+			Click "CRM/CommonObjects/CredentialsPopUp"
+			TypeText CRMPassword
+			Click (Text: "OK")		
+		end if
+	End if
+	if imageFound(text: "Continue", waitFor:5) then 
+		Click (Text: "Continue")		
+	end if
+	if url contains "uat-web.aws" then
+		Repeat until ImageFound(text:"Forgotten your password",validCharacters:"*", validWords:"*", waitFor:5) 
+			if the repeatIndex > 10 then Throw "Unable to load the login page"
+			TypeText controlKey,l
+			// entering log out url
+			TypeText "https://uat-web.aws.aat.org.uk/login?destination=/user/logout"
+			TypeText  returnKey	
+			wait 2
+			// making sure user is logged out by entering home page url
+			TypeText controlKey,l
+			TypeText "https://uat-web.aws.aat.org.uk/Login"
+			TypeText  returnKey	
+			wait 1
+		End repeat
+	end if
+	TypeText controlKey,l
+	TypeText url
+	TypeText  returnKey	
+	wait 1
+end LaunchBrowserWithURL
+
+// Function for scrolling down until an image is found
+to handle ScrollDownuntilImage with image
+	repeat until imagefound(1,image: image) 	
+		if the repeatIndex > 15 then Throw "Image not found" 
+		ScrollWheelDown 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollDownuntilImage
+
+// Function for scrolling up until an image is found
+to handle ScrollUpuntilImage with image
+	repeat until imagefound(1,image: image) 	
+		if the repeatIndex > 15 then Throw "Image not found" 
+		ScrollWheelUp 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollUpuntilImage
+
+// Function for scrolling down until a text is found
+to handle ScrollDownuntilText with text
+	repeat until imagefound(Text: text,waitFor:1) 
+		if the repeatIndex > 15 then Throw "Text not found" 
+		ScrollWheelDown 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollDownuntilText
+
+// Function for scrolling up until a text is found
+to handle ScrollUpuntilText with text
+	repeat until imagefound(Text: text,waitFor:1) 
+		if the repeatIndex > 15 then Throw "Text not found" 
+		ScrollWheelUp 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollUpuntilText
+
+// Function for closing the current browser
+to handle CloseBrowser
+	wait 2
+	TypeText altKey,F4	
+	if ImageFound(text:"this page", validCharacters:"*", validWords:"*", waitFor:5) then 
+		TypeText returnKey
+		wait 1
+	end if	
+end CloseBrowser
+
+// Function for entering any text on any text box field with the given hot spot position
+to handle TextBoxes Label,Data
+	put imagelocation(text:label,waitfor:20)+(-150,-85) into TL
+	put imagelocation(text:label,waitfor:20)+(1100,100) into BR 
+	Click imagelocation(text:label,waitfor:20,searchrectangle:(TL,BR))+(5,30)
+	typetext controlKey,"a"
+	typetext data
+	Click (text:label,waitfor:20)
+end TextBoxes
+
+// Function to select a value from a dropdown
+to handle DropDown Label, data
+	Click imagelocation(text:label,waitfor:20)+(5,30)
+	Click (text:data,waitfor:20)
+	//write some code
+end DropDown
+
+// Function to select a radio button
+to handle RadioBtn label
+	put imagelocation(text:label,waitfor:20)+(-145,-25) into TL
+	put imagelocation(text:label,waitfor:20)+(800,25) into BR
+	Click(text:Label,waitfor:20,caseSensitive:on,searchrectangle:(TL,BR))
+end RadioBtn
+
+
+

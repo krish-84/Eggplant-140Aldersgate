@@ -1,0 +1,37 @@
+﻿
+
+// Function for scrolling down until an image is found
+to handle ScrollDownuntilImage with image
+	repeat until imagefound(1,image: image) 	
+		if the repeatIndex > 15 then Throw "Image not found" 
+		ScrollWheelDown 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollDownuntilImage
+
+// Function for scrolling up until an image is found
+to handle ScrollUpuntilImage with image
+	repeat until imagefound(1,image: image) 	
+		if the repeatIndex > 15 then Throw "Image not found" 
+		ScrollWheelUp 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollUpuntilImage
+
+// Function for scrolling down until a text is found
+to handle ScrollDownuntilText with text
+	repeat until imagefound(Text: text,waitFor:1) 
+		if the repeatIndex > 15 then Throw "Text not found" 
+		ScrollWheelDown 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollDownuntilText
+
+// Function for scrolling up until a text is found
+to handle ScrollUpuntilText with text
+	repeat until imagefound(Text: text,waitFor:1) 
+		if the repeatIndex > 15 then Throw "Text not found" 
+		ScrollWheelUp 4 //Scrolls 4 increments		
+		wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+	end repeat	
+end ScrollUpuntilText

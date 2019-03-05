@@ -1,0 +1,32 @@
+﻿
+Params ProgReg
+global LastName
+
+Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Programme Registra"
+
+WaitFor 40, text:"Programme Registration Associated View"
+
+wait 2
+
+//put "AAT Access Award in Bookkeeping" into ProgReg
+DoubleClick text:ProgReg, waitFor:40
+
+WaitFor 40, text:"Invoice", validCharacters: "*"
+
+wait 2
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "End Date", today - 2 day
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Registered Date", today - 2 day
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+Run "CommonCRMFunctions" 's ClickTheNameOnTheForm 
+
+WaitFor 40, text: "General", ValidCharacters:"*"
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+
+wait 1

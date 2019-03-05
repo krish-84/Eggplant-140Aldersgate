@@ -1,0 +1,29 @@
+﻿
+
+
+
+Click (Image:"CRM/PreRequisitePage/All_PreRequisite_Tick", waitFor:20 )
+
+//Click (Image:"CRM/PreRequisitePage/Three_Dots", waitFor:20 )
+
+Click (Text: "Run workflow", waitFor:20)
+
+Click (Text: "Add",searchRectangle:ScreenPart("VerticalMiddle"), waitFor:20)
+
+WaitFor 30, Text:"OK",searchRectangle:ScreenPart("VerticalMiddle"), caseSensitive:On
+
+Click (Text:"OK",searchRectangle:ScreenPart("VerticalMiddle"), caseSensitive:On )
+
+repeat until ImageFound(Text:"Approved",caseSensitive:On, waitFor:5)	
+	if the repeatIndex > 12 then Throw "Pre-req is not getting approved" 
+	Click (Text: "Prerequisite Status")
+end repeat
+
+Click imagelocation(text:"INFORMATION",waitfor:20)+(0,25)
+
+WaitFor 20,Text:"APPROVE"
+
+wait 5
+
+
+

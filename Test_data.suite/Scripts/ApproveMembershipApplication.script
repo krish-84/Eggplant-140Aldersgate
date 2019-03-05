@@ -1,0 +1,27 @@
+﻿
+Global LastName
+
+//WaitFor 40, (Text: "APPROVE" ,caseSensitive: On, searchRectangle:ScreenPart("RightHalf"),watiFor:10)
+
+Repeat until ImageFound((Text: "APPROVE" ,caseSensitive: On, textDifference: 1,searchrectangle:((910,54), (1300,215)),watiFor:5))
+	if the repeatIndex > 6 then Throw "Unable to approve membership application" 
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 5)
+End repeat
+
+Repeat until not ImageFound(Text: "APPROVE" ,caseSensitive: YES, searchrectangle:((910,54), (1300,215)),watiFor:10)
+	if the repeatIndex > 6 then Throw "Unable to approve membership application" 
+	if ImageFound(Text: "APPROVE" ,caseSensitive: YES,searchrectangle:((910,54), (1300,215)),watiFor:10) then 		
+		Click (Text: "APPROVE" ,caseSensitive: YES,searchrectangle:((910,54), (1300,215)),watiFor:10)
+		Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+		Click (Text:"Finish",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+	end if
+End repeat
+
+Click (Text: LastName,ValidCharacters:"*", TextDifference:3, searchRectangle:ScreenPart("HorizontalMiddle"), waitFor:30 )
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 40)
+wait 1
+WaitFor 40, (text: LastName,ValidCharacters:"*", TextDifference:3, searchrectangle:((2,130),(1918,1028)))
+
+wait 3

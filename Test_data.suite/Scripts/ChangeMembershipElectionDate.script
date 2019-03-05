@@ -1,0 +1,22 @@
+﻿
+Params date
+
+wait 2
+
+Click (Text:"Connections", waitFor:20)
+
+wait 2
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Certificate Numbers"
+
+set the SearchRectangle to (ScreenPart("BottomLeftQuadrant"))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Membership Election", date
+set the SearchRectangle to ()
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 40)
+
+wait 2
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 5

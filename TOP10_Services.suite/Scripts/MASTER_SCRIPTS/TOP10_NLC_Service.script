@@ -1,0 +1,182 @@
+﻿Try
+	
+	global LastName
+	global EmailID
+	global EmployersName
+	global MemberID
+	global LoginID
+	global TrainingProvider
+	global TPmainContact
+	global TPpaymentCode
+	
+	//Generating a dynamic Employer Name
+	Put "NLC Employer"&&today's date into EmployersName
+	
+	Set TrainingProvider to "QAorg.1"
+	Set TPmainContact to "50005026@aat-test.org.uk"
+	
+	//Generating a dynamic Last name and Email ID
+	set suffix to (any item of a..z for each item of 1..6) joined by empty 
+	set emailSuffix to (any item of 1..9 for each item of 1..5) joined by empty 
+	put "Nlc-" & suffix into LastName
+	put LastName & emailSuffix & "@aat-test.org.uk" into EmailID
+	//put "littlelambs@aat-test.org.uk" into EmailID
+	log LastName
+	log EmailID
+	
+	------NEW Registration through MASTER CARD------------------------
+	//Launching UAT WEB
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk/login"
+	//Registering a student on Short qual
+	Run "WEB_SCRIPTS/Registering_A_Student_on_SQ" EmailID , LastName
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	//Launching UAT CRM
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","http://uatcrm.aat.org.uk/AAT/main.aspx"
+	//Searching the Student that was registered
+	Run "CommonCRMFunctions" 's SearchByIDorName LastName
+	//Verifying if the prog reg has come through to CRM
+	Run "CommonCRMFunctions" 's ConfirmProgRegPayload "Access Award in Bookkeeping"
+	If (ImageFound(text:"Access Award in Bookkeeping", waitFor:20)) then LogSuccess "PASS: SQ (NEW) prog reg has come through to CRM successfully " else LogError "FAIL: SQ (NEW) prog reg hasn't come through to CRM successfully"
+	//Reading the memberID of the student
+	run "CommonCRMFunctions" 's ReadMemberID
+	
+	//Verifying if the student's membership status is showing as CURRENT
+	if ImageFound(text:"Current", waitFor:40) then LogSuccess "PASS: Membership application has come through" else LogError "FAIL: Membership application has NOT come through"
+	//Verifying if the NEWLY created employer along with Job title has come through to CRM
+	Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Employment"
+	if ImageFound(text:EmployersName, waitFor:40) and if ImageFound(text:"Jr Accountant", waitFor:40) then LogSuccess "PASS: Employer details along with Job title has come through to CRM" else LogError "FAIL: Employer details along with Job title has NOT come through to CRM"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	------CURRENT Registration through VISA CARD------------------------
+	//Launching UAT WEB
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk/login"
+	
+	//Logging in to MyAAT as the Student who was registered earlier
+	Run "WEB_SCRIPTS/LoginToMyAAT" LoginID
+	//Adding an additional qualification  - AQ qual to the above current student
+	Run "WEB_SCRIPTS/Adding_AQ_To_Current_Student"
+	//Loggin out of MyAAT
+	Run "WEB_SCRIPTS/LogoutOfMyAAT"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	//Launching UAT CRM
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","http://uatcrm.aat.org.uk/AAT/main.aspx"
+	//Searching the same Student that was registered and for whom we added an addtional qual
+	Run "CommonCRMFunctions" 's SearchByIDorName LastName
+	//Verifying if the prog reg has come through to CRM
+	Run "CommonCRMFunctions" 's ConfirmProgRegPayload "AAT Accounting Qualifications 2016"
+	If (ImageFound(text:"AAT Accounting Qualifications 2016", waitFor:20)) then LogSuccess "PASS: AQ (Additional) prog reg has come through to CRM successfully " else LogError "FAIL: AQ (Additional) prog reg hasn't come through to CRM successfully"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	
+	//Verifying if the additional qualification has come through to WEB dashboard
+	//Launching UAT WEB
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk/login"
+	//Logging in to MyAAT as the Student who was registered earlier
+	Run "WEB_SCRIPTS/LoginToMyAAT" LoginID
+	//Verifying if the additional qualification has come through to the Student profile
+	Run "CommonWebFunctions" 's ConfirmAdditonalQualificationOnStudentProfile "Accounting Qualifications"
+	//Loggin out of MyAAT
+	Run "WEB_SCRIPTS/LogoutOfMyAAT"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	
+	
+	//Lapsing the Student on CRM
+	//Launching UAT CRM
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","http://uatcrm.aat.org.uk/AAT/main.aspx"
+	//Searching the same Student that was registered and for whom we added an addtional qual
+	Run "CommonCRMFunctions" 's SearchByIDorName LastName
+	//Ending SQ prog reg
+	Run "CRM_SCRIPTS/Lapsing_OR_Ending_Prog_Reg" "Access Award in Bookkeeping"
+	//Ending AQ prog reg
+	Run "CRM_SCRIPTS/Lapsing_OR_Ending_Prog_Reg" "AAT Accounting Qualifications 2016"
+	//Ending or Lapsing the subscription
+	Run "CRM_SCRIPTS/Lapsing_A_Subscription"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	
+	------Generating a payment code PAYMENT CODE------------------------
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk/login"
+	//Logging in to MyAAT as the TP main contact to create a payment code
+	Run "WEB_SCRIPTS/LoginToMyAAT" TPmainContact
+	//Generating a Payment Code
+	Run "WEB_SCRIPTS/Creating_A_Payment_Code_For_A_TP" TrainingProvider
+	//Loggin out of MyAAT
+	Run "WEB_SCRIPTS/LogoutOfMyAAT"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	
+	------Reinstatement on AQ using Payment Code------------------------
+	//Launching UAT WEB
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk/login"
+	//Logging in to MyAAT as the Student who was registered earlier
+	Run "WEB_SCRIPTS/LoginToMyAAT" LoginID
+	//Reinstate on AQ qual using payment code
+	Run "WEB_SCRIPTS/Reinstating_A_Student_on_AQ"
+	//Loggin out of MyAAT
+	Run "WEB_SCRIPTS/LogoutOfMyAAT"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	
+	//Launching UAT CRM
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","http://uatcrm.aat.org.uk/AAT/main.aspx"
+	//Searching the same Student that was registered and for whom we added an addtional qual
+	Run "CommonCRMFunctions" 's SearchByIDorName LastName
+	//Verifying if the prog reg has come through to CRM
+	Run "CommonCRMFunctions" 's ConfirmProgRegPayloadForSameDayReinstated "AAT Accounting Qualifications 2016"
+	Put EveryImageLocation(text:"AAT Accounting Qualifications 2016", waitFor:5) into FoundImages
+	If the number of items in FoundImages is 2 then LogSuccess "PASS: AQ (Reinstated) prog reg has come through to CRM successfully " else LogError "FAIL: AQ (Reinstated) prog reg hasn't come through to CRM successfully"
+
+	//Verifying if the payment for NEW reg has come through to AX (Checking now as it takes time to come on AX)
+	run "CommonCRMFunctions" 's ValidateViewTransaction
+	if ImageFound(text:"43.00", waitFor:40) and if ImageFound(text:"Adjust", waitFor:40) then LogSuccess "PASS: NEW - Master card Payment for NEW registration has successfully come through to AX" else LogError "FAIL: NEW - Master card Paymentfor NEW registration has NOT come through to AX"
+	//Verifying if the payment for additional qualification has come through to AX (Checking now as it takes time to come on AX)
+	if ImageFound(text:"92.00", waitFor:40) and if ImageFound(text:"Adjust", waitFor:40) then LogSuccess "PASS: Current / Additional reg - VISA card Payment for additional qualification registered has successfully come through to AX" else LogError "FAIL: Current / Additional reg - VISA card Payment for additional qualification registered has NOT come through to AX"
+	//Closing View Transaction window
+	run "CommonCRMFunctions" 's ExitViewTransaction
+	
+	//Verifying if the payment code is showing against the TP orders 
+	Run "CommonCRMFunctions" 's SearchByIDorName "QAorg.1"
+	Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Orders"
+	Run "CRM_SCRIPTS/Org_Orders_Recent_View"
+	Put EveryImageLocation(text:LastName, waitFor:5) into FoundImages
+	If the number of items in FoundImages is 2 then LogSuccess "PASS: Payment code has been linked to the TP and the order has been created " else LogError "FAIL: Payment code has NOT been linked to the TP and the order has NOT been created"
+	//Quitting the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	
+	Catch exception
+	CaptureScreen	
+	put the result
+	Run "CommonBrowserFunctions" 's CloseBrowser	
+	throw exception
+	
+End try
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

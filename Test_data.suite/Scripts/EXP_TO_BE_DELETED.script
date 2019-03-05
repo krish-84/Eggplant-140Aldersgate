@@ -1,0 +1,14 @@
+﻿
+
+//nested condition
+
+set a to 1
+set b to 4
+set c to 3
+
+
+If a = "1" and (b = "3" or  c = "2") then
+	Log "proceed"
+Else 
+	Log "fail"
+end if

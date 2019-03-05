@@ -1,0 +1,32 @@
+﻿Params MemOptionType
+
+
+
+WaitFor 40, text:"ADD MEMBERSHIP OPTION", caseSensitive: On
+
+wait 3
+
+Click (Text: "ADD MEMBERSHIP OPTION", caseSensitive: On, waitFor: 40)
+
+WaitFor 30, text:"Next",searchRectangle:ScreenPart("RightHalf")
+
+If ImageFound(text:"Main Application", waitFor:3) then
+	Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+End If
+
+Set the SearchRectangle to ((2,125),(1918,1028))
+Click (Text:"AATQB", ValidCharacters:"*",waitFor:20)
+
+Click (Text: MemOptionType , ValidCharacters:"*", waitFor:20 )
+Set the SearchRectangle to ()
+
+Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+Click (Text:"Finish",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+//Click text:MemOptionType, waitFor:20
+
+
+

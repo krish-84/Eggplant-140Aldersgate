@@ -1,0 +1,37 @@
+﻿
+
+set TestList to ("MASTER_SCRIPTS/TOP10_NLC_Service") -- create a list of the scripts you want to run, in the order in which you'd like to run them
+
+//repeat this process with each script in the list
+
+repeat with each item TestScript of TestList
+	
+	RunWithNewResults TestScript -- run each script in the test, creating a new set of results for each
+	
+	put the result into Outcome -- get the result of the script execution and store it in a variable
+	
+	put TestScript & the long date into title -- create the title for the email
+	
+	put Outcome's logfile into screenError -- store the file path of the log file
+	
+	replace "logfile.txt" with "screen_error.tiff" in screenError -- store the file path of the screen error, if there is one
+	
+	// Use a conditional statement to send the email based on whether or not the script failed
+	
+	if Outcome's status is "failure"
+	
+	then
+		
+		SendMail(FROM: "krish.iyer@aat.org.uk", SMTP_USER: "krish.iyer@aat.org.uk" ,To: "krish.iyer@aat.org.uk", SMTP_HOST:"Exchange.internal.aat.org.uk",  subject:  Outcome's status && ":TOP 10 Automation Run- " && TestScript && today's date && time &&  "- script results:"&& Outcome's status,  body:"The" && TestScript && "FAILED" && Outcome)
+		
+		-- Indicate the attachments. Note, this will log a warning in your master script log file if there is no screen error to attach.
+		
+	else
+		
+		// send an email with the log file attached
+		
+		SendMail(FROM: "krish.iyer@aat.org.uk", SMTP_USER: "krish.iyer@aat.org.uk" ,To: "krish.iyer@aat.org.uk", SMTP_HOST:"Exchange.internal.aat.org.uk",  subject:  Outcome's status && ":TOP 10 Automation Run-" && TestScript && today's date && time &&  "- script results:"&& Outcome's status,  body:"The" && TestScript && "PASSED" && Outcome)
+	end if
+	
+end repeat
+

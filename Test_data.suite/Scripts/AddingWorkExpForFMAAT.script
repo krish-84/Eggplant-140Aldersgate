@@ -1,0 +1,52 @@
+﻿
+
+
+Click (Text: "ADD NEW WORK", caseSensitive: On, waitFor: 40)
+WaitFor 40, text:"Duties",ValidCharacters:"*"
+wait 2
+Click text:"Competency", ValidCharacters:"*",waitFor:20
+wait 2
+WaitFor 40, text:"Competency Type"
+wait 1
+set the SearchRectangle to (ScreenPart("TopLeftQuadrant"))
+Run "CommonCRMFunctions" 's CRM_Dropdown "Status", "Approved By AAT"
+Run "CommonCRMFunctions" 's CRM_Dropdown "Verification Status", "Verified"
+set the SearchRectangle to ()
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Date From", today - 7 years
+TypeText tabKey
+TypeText "Analyst"
+//Run "CommonCRMFunctions" 's CRM_TextBoxes "Job Title", "Analyst" -- Its failing to read Job title from this form
+//Run "CommonCRMFunctions" 's CRM_TextBoxes "Date T", today - failing to read
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Hours Worked Per", "35"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Percentage of Time", "50% or more"
+Repeat 4 times
+	TypeText tabKey
+End repeat
+
+TypeText today
+
+wait 1
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Membership Type", "FMAAT", "Enter"
+wait 1
+Run "CommonCRMFunctions" 's CRM_TextBoxes "No. of staff", "0"
+
+Run CommonBrowserFunctions's ScrollDownuntilText "Last Verification R"
+
+Run "CommonCRMFunctions" 's CRM_Dropdown "Verifier Title", "Prof"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Verifier Surname", "automation"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Verifier First Name", "test"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Verifier Job Title", "Sr. Accountant"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Verifier Email Address", "test@automation.com"
+Run "CommonCRMFunctions" 's CRM_Dropdown "Verifier Relationship", "AAT Full or Fellow Member"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Letter of" ,  "ACCA FMAAT"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Verifier Phone Numb", "1234567890"
+
+Click (Text: "CLOSE",ValidCharacters:"*", caseSensitive: On, waitFor: 40)
+wait 1
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 3
+
+
+

@@ -1,0 +1,59 @@
+﻿
+//very unstable page thats why some hard coded waits
+
+WaitFor 40, text:"ADD NEW PROG"
+
+Click (Text: "ADD NEW PROG", caseSensitive: On, waitFor: 40)
+
+WaitFor 40, text:"Invoice"
+
+wait 3
+
+Click text:"Invoice", ValidCharacters:"*",waitFor:20
+
+wait 2
+
+WaitFor 40, text:"Start Level"
+
+Click text:"Invoice", ValidCharacters:"*",waitFor:20
+
+WaitFor 40, text:"Start Level"
+
+Set the SearchRectangle to ((15,249),(940,650))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Programme", "AAT Accounting Qualifications 2016", "Enter"
+set the SearchRectangle to ()
+
+wait 1
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Start Level", "AAT Foundation Certificate in Accounting - Level 2", "Enter"
+
+wait 1
+
+//Run "CommonCRMFunctions" 's CRM_TextBoxes "Current Level", "AAT Foundation Certificate in Accounting - Level 2", "Enter" --Need to ask farzad to unlock the field
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Training Provider", "QAorg.10", "Enter"
+
+wait 1
+
+Click text:"Invoice", ValidCharacters:"*",waitFor:20
+
+wait 1
+
+Run "CommonCRMFunctions" 's CRM_Dropdown "Funding Type - St", "Student"
+
+wait 1
+
+Click (Text: "CLOSE",ValidCharacters:"*", caseSensitive: On, waitFor: 40)
+
+wait 3
+
+Repeat until not ImageFound (Text: "CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor: 1)
+	if the repeatIndex > 6 then Throw "Unable to close the form" 
+	wait 2
+	if ImageFound(text:"CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor:1) then Click (Text: "CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor: 1)
+	wait 3
+End repeat
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 3

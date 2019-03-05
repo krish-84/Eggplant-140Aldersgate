@@ -1,0 +1,158 @@
+﻿
+global LastName
+global DOB
+global TrainingProvider
+
+Repeat until ImageFound(text:"Register for an additional qualification", waitFor:30)
+	if the repeatIndex > 60 then Throw "Dashboard links are still not appearing on MyAAT - owing to CRM flag on membership hasn't come through to WEB"
+	TypeText F5
+End repeat
+
+WaitFor 40, text:"Register for an additional qualification"
+
+click (text: "Register for an additional qualification", waitFor:20)
+
+WaitFor 40, text:"AAT Accounting Qualifications"
+
+//Choosing AQ qual
+
+click (text:"AAT Accounting Qualifications", waitFor:20)
+
+click (text:"AAT Accounting Qualifications 2016", waitFor:20)
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Existing personal details page
+
+if ImageFound(text:LastName, waitFor:40) and if ImageFound(text:DOB, waitFor:20)then LogSuccess "PASS: Existing details are correct" else LogError "FAIL: Existing details are INCORRECT"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("BottomRightQuadrant")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//AAT Accounting Qualifications 2016  / Choosing TP page
+
+WaitFor 40, text:"Select your training provider"
+
+Run "CommonWebFunctions" 's DropDown "Training provider" , TrainingProvider
+
+Run "CommonWebFunctions" 's DropDown "Start at" , "Foundation"
+
+Run "CommonWebFunctions" 's DropDown "tended end" , "Professional"
+
+Run "CommonWebFunctions" 's RadioBtn "distance learning" , "Yes"
+
+TypeText tabKey
+TypeText spacebar
+
+Run "CommonWebFunctions" 's RadioBtn "AAT fees" , "Self"
+
+Run "CommonWebFunctions" 's RadioBtn "AAT training" , "Self"
+
+Run "CommonWebFunctions" 's RadioBtn "Are you training" , "No"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Your education page
+
+WaitFor 40, text:"Which of the following"
+
+Run "CommonWebFunctions" 's DropDown "Which of the following" , "mal qualification"
+
+Run "CommonWebFunctions" 's DropDown "Learning difficulties" , "I do not"
+
+Run "CommonWebFunctions" 's RadioBtn "intend to become" , "Yes"
+
+Run "CommonWebFunctions" 's RadioBtn "intend to continue" , "Yes"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Your existing employment record
+
+WaitFor 40, text:"Your existing employment record"
+
+Run "CommonWebFunctions" 's DropDown "Your current situation" , "I am employed"
+
+click (text: "Your existing employment record", WaitFor: 10)
+
+Run "CommonFunctions" 's ScrollDownuntilText "Continue"
+
+Run "CommonWebFunctions" 's RadioBtn "full time" , "Part time"
+
+Run "CommonWebFunctions" 's RadioBtn "undertake accountancy" , "No"
+
+click (Text:"Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40) , (Image:"WEB/CommonObjects/Continue_Button" ,SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+//Declaration page
+
+WaitFor 40, text:"Declaration"
+
+click (Text:  "I agree to the declaration",waitfor:40)
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Selected qualifications page
+
+WaitFor 40, text:"Selected qualifications"
+
+click (Text:  "Continue",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+// Payment page
+
+if ImageFound(text:"Amount",waitFor: 25) then 
+	click (text:"Amount") 
+else
+	TypeText F5
+end if
+if ImageFound(text:"Amount",waitFor: 5) then click (text:"Amount") 
+TypeText tabKey
+TypeText "Current"
+TypeText tabKey
+TypeText spacebar
+TypeText tabKey
+wait 2
+TypeText "1000010000000007"
+TypeText tabKey
+TypeText "02"
+TypeText tabKey
+TypeText "2020"
+TypeText tabKey
+wait 3
+TypeText "125"
+TypeText tabKey
+TypeText tabKey
+wait 3
+TypeText spacebar //continue
+
+If ImageFound(text:"Payment success", waitFor:60) then LogSuccess "User is able to successfully register for an additional qualification (AQ) through the WEB" else LogError "User is NOT able to successfully register for an additional qualification (AQ) through the WEB"
+
+//Payment success page
+
+Run "CommonFunctions" 's ScrollDownuntilText "Finish"
+
+click (Text:  "Finish",SearchRectangle: (ScreenPart("RightHalf")),waitfor:40)
+
+WaitFor 40, (text:"How to start studying", validCharacters:"*",validWords:"*")
+
+wait 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

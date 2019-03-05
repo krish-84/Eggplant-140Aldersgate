@@ -1,0 +1,19 @@
+﻿
+//Clicking on the EPA Registration link from the Dashboard of MyAAT 
+WaitFor 20, (text:"EPA registration", caseSensitive:on)
+
+(*Click (Text:"EPA registration", waitFor:10)
+//Clicking on the start button on the first page of the app
+Click (Image: "WEB/StartPage/Start_Button", waitFor:10)*)
+
+
+repeat until imagefound (Image: "WEB/StartPage/Start_Button", waitFor:10)
+	if the repeatIndex > 15 then Throw "Image not found" 
+	Click (Text:"EPA registration", waitFor:10)
+end repeat
+
+Click (Image: "WEB/StartPage/Start_Button", waitFor:10)
+
+
+
+

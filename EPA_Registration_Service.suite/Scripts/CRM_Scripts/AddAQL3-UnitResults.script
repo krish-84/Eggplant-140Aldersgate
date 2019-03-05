@@ -1,0 +1,46 @@
+﻿
+
+Click (Text: "ADD NEW UNIT RESULT", caseSensitive: On, waitFor: 20)
+
+WaitFor 20, text:"New Unit Result"
+
+wait 3
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Learning Area", "AAT Advanced Diploma in Accounting - Level 3", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Date of Result", today - 2 day
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Date of Assessment", today - 2 day
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Training Provider (S", "QAorg.10", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Training Provider (R", "QAorg.10", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Result Source", "CBT", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_Dropdown "Internal Verificat", "Approved"
+
+Set the SearchRectangle to ((40,445),(660,560))
+Run "CommonCRMFunctions" 's CRM_Dropdown "Result", "Competent"
+set the SearchRectangle to ()
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Method of Assess", "AAT Assessment", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Actual Result", "Pass"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Grade", "Pass"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Percentage", "80"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Source Percentage", "80"
+
+Click text:"Run Result Mani", waitFor:5
+
+Click (Text: "CLOSE", caseSensitive: On, waitFor: 20)
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+Run "CommonCRMFunctions" 's ClickTheNameOnTheBanner 
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 5
+

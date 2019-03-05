@@ -1,0 +1,10 @@
+﻿
+Params CentreName
+
+// Clicking on the change centre button
+Click (Text: "Change centre", waitFor: 20)
+//Clicking on the EPA centre picker dropdown
+Click (Image:"WEB/SelectStudentsPage/Choose_a_centre_Dropdown", waitFor: 10 )
+// Choosing the centre as per the test
+Click (Text: CentreName , waitFor: 10)
+

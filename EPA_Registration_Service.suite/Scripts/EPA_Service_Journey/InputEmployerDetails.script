@@ -1,0 +1,50 @@
+﻿
+global EmployersName
+
+global ERN
+
+
+//Generating a dynamic Employer Name
+Put "Automation Employer"&&today's date into EmployersName
+//Generating a static ERN (so it can be asserted with a static value for any test case)
+put "AutomationERN" into ERN
+WaitFor 10, text:"Add employer details", caseSensitive: On
+// Clicking on the Add employer for it to collapse the form to fill the details
+Click (Text: "Add employer details", caseSensitive: On,  waitFor: 10)
+// Entering Employer name
+Run CommonBrowserFunctions's TextBoxes "Employer organisation name", EmployersName
+// Clicking on the postcode field
+wait 5
+Click (Image: "WEB/InputEmployerDetailsPage/Postcode_field", waitFor:10)
+// Entering postcode
+TypeText "EC1A 4HY"
+// Clicking on the find address button
+Click (Text: "Find address", waitFor:10)
+wait 5
+// scrolling down to the address results  field
+Run CommonBrowserFunctions's ScrollDownuntilText "Association of Accounting"
+// Clicking on the one of the address that was returned
+Click (Text: "Association of Accounting")
+//hard wait for the address to auto fill with the selection
+wait 5
+// Entering ERN
+Run CommonBrowserFunctions's ScrollUpuntilText "Find address"
+Run CommonBrowserFunctions's TextBoxes "Employer registration number", ERN
+// scrolling down the form
+Run CommonBrowserFunctions's ScrollDownuntilText "Next"
+// Entering Mentor firstname
+Run CommonBrowserFunctions's TextBoxes "Name of workplace mentor", "AutomationFirstName"
+//tabbing
+TypeText tabKey
+// Entering Mentors lastname
+TypeText "AutomationLastName"
+// Entering Mentors Email 
+Run CommonBrowserFunctions's TextBoxes "Workplace mentor email", "Automation@automation.com"
+// Entering Mentors Phone number
+Run CommonBrowserFunctions's TextBoxes "Workplace mentor phone", "1324567890"
+// Clicking on Save employer details
+Click (Text: "Save employer details", watiFor: 10)
+// Scrolling down
+Run CommonBrowserFunctions's ScrollDownuntilImage "WEB/InputEmployerDetailsPage/Next_Button"
+//Clicking on next button
+Click (Image: "WEB/InputEmployerDetailsPage/Next_Button", waitFor: 10)

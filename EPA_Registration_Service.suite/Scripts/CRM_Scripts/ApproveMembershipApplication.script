@@ -1,0 +1,10 @@
+﻿
+Global LastName
+
+Click (Text: "APPROVE" ,searchRectangle:ScreenPart("RightHalf"),watiFor:10)
+Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+Click (Text:"Finish",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+Click (Text: LastName,ValidCharacters:"*", TextDifference:1, searchRectangle:ScreenPart("HorizontalMiddle"), waitFor:30 )
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+wait 5
+

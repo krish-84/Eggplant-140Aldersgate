@@ -1,0 +1,74 @@
+﻿
+Params MemType, Route
+
+
+Click (Text: "ADD NEW MEMBERSHIP", caseSensitive: On, waitFor: 20)
+WaitFor 30, text: "Payment Status", caseSensitive: On
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+wait 2
+WaitFor 30, text: "Route", caseSensitive: On
+Click text:"Payment",ValidCharacters:"*", waitFor:20
+wait 2
+WaitFor 30, text: "Membership Type", caseSensitive: On
+wait 4
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Membership Type", MemType, "Enter"
+wait 2
+Click text:"Payment",ValidCharacters:"*", waitFor:20
+wait 1
+Set the SearchRectangle to ((510,340),(1918,1028))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Route", Route , "Enter"
+Set the SearchRectangle to ()
+
+If MemType = "MAAT" and if Route does not contain "AATQB" and if Route does not contain "Licensed" and if Route does not contain "MIP"then
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+	WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	Click (Text: "Payment Method", waitFor: 10)
+	Run CommonBrowserFunctions's ScrollDownuntilText "Professional Recommendation"
+	Click (Text: "Professional Recommendation", waitFor:10)
+	Run CommonBrowserFunctions's ScrollDownuntilText "Email Communication"
+	set the SearchRectangle to (ScreenPart("BottomRightQuadrant"))
+	Run "CommonCRMFunctions" 's CRM_Dropdown "Status", "Approved"
+	set the SearchRectangle to ()
+End If
+
+If MemType = "FMAAT" and if Route does not contain "AATQB" and if Route does not contain "Licensed" and if Route does not contain "MIP" then
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+	WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	Click (Text: "Payment Method", waitFor: 10)
+	Run CommonBrowserFunctions's ScrollDownuntilText "Professional Recommendation"
+	Click (Text: "Professional Recommendation", waitFor:10)
+	Run CommonBrowserFunctions's ScrollDownuntilText "Email Communication"
+	set the SearchRectangle to (ScreenPart("BottomRightQuadrant"))
+	Run "CommonCRMFunctions" 's CRM_Dropdown "Status", "Approved"
+	set the SearchRectangle to ()
+End If
+
+wait 3
+
+repeat until imagefound (Text:"APPROVE", caseSensitive: On, waitFor: 5)
+	if the repeatIndex > 3 then Throw "Not able to save membership application" 
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)	
+end repeat
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 3
+
+
+
+(*
+set memtype to "fmaat"
+set route to "aatqb fmaat maat"
+//set route to "fmaat maat"
+
+
+if route.asText doesn't contain "aat"   and if memtype = "fmaat" and route.asText doesn't contain "xyz" then 
+	Log ("approve")
+end if
+
+if route.asText doesn't contain"aatqb"  and if memtype = "maat" then 
+	Log ("approve")
+end if
+
+log "save"*)

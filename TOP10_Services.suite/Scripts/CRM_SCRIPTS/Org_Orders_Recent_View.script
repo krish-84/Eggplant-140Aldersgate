@@ -1,0 +1,9 @@
+﻿
+WaitFor 40, text:"Order Associated View"
+wait 1
+click (text: "Active", waitFor:40)
+click (text: "All", waitFor:40)
+WaitFor 40, text:"Submitted"
+click (text: "Date Received", waitFor:40)
+wait 2
+click (text: "Date Received", waitFor:40)

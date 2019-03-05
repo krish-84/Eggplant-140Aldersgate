@@ -1,0 +1,186 @@
+﻿
+
+// Function to search for a record using ID or Lastname
+to handle SearchByIDorName with ID
+	click "CRM/CommonObjects/Search_Icon"
+	TypeText ID
+	TypeText returnKey
+	repeat until ImageFound(imageName:"CRM/SearchPage/Contact_Card_Icon", waitFor:30)	
+		if the repeatIndex > 12 then Throw "Payload hasnt come through to CRM" 
+		TypeText controlKey,a
+		TypeText ID
+		TypeText returnKey
+	end repeat	
+	Click (Image: "CRM/SearchPage/Contact_Card_Icon")	
+	WaitFor 40, text:"General"	
+end SearchByIDorName
+
+// Function to navigae from the TOP menu bar of an active record
+to handle NavigateFromTopMenuTo with EntityName
+	wait 1
+	Put EveryImageLocation(ImageName:"CRM/CommonObjects/Right_Arrow_Icon_On_TopMenu",searchrectangle:((0,50),(1910,100)), waitFor:5) into FoundImages
+	If ImageFound(text:"Contact",searchrectangle:((0,50),(1910,100)), waitFor:5) then
+		log FoundImages	
+		log the number of items in FoundImages
+		Repeat until the number of items in FoundImages is 2
+			Put EveryImageLocation(ImageName:"CRM/CommonObjects/Right_Arrow_Icon_On_TopMenu",searchrectangle:((0,50),(1910,100)), waitFor:5) into FoundImages
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			click (50,117)
+			wait 2
+			log the number of items in FoundImages
+		End repeat	
+		Repeat until ImageFound(text:"Common",searchRectangle:((5,90), (1910,450)), waitFor:5)
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			Click item 2 of FoundImages
+		End repeat		
+	Else if not ImageFound(text:"Contact",searchrectangle:((0,50),(1910,100)), waitFor:5) then
+		log FoundImages	
+		log the number of items in FoundImages
+		Repeat until the number of items in FoundImages is 1
+			Put EveryImageLocation(ImageName:"CRM/CommonObjects/Right_Arrow_Icon_On_TopMenu",searchrectangle:((0,50),(1910,100)), waitFor:5) into FoundImages
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			click (50,117)
+			wait 2
+			log the number of items in FoundImages
+		End repeat	
+		Repeat until ImageFound(text:"Common",searchRectangle:((5,90), (1910,450)), waitFor:5)
+			if the repeatIndex > 6 then Throw "Unable to navigate to" && EntityName
+			Click item 1 of FoundImages
+		End repeat			
+	End if
+	WaitFor 40, text: EntityName,searchRectangle:((5,90), (1910,450))
+	wait 2
+	Click (Text: EntityName,searchRectangle:((5,90), (1910,450)))
+	WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+end NavigateFromTopMenuTo
+
+//Function to click on the last name of the contact on any page on the banner 
+to handle ClickTheNameOnTheBanner
+	Global TestDataType
+	WaitFor 40, Text: TestDataType,  ValidCharacters:"*",ValidWords:"*",TextDifference:2,searchrectangle:((10,100),(1910,350))
+	Repeat until ImageFound(Text: TestDataType,  ValidCharacters:"*",TextDifference:2,searchrectangle:((20,240),(1000,1000)), waitFor:5)
+		if the repeatIndex > 6 then Throw "Unable to go back to the contact page from Banner" 
+		Click (Text: TestDataType,  ValidCharacters:"*",ValidWords:"*",TextDifference:2,searchrectangle:((10,100),(1910,350)),waitFor: 10)
+	End repeat	
+	WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	wait 3
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 40)
+	wait 1
+end ClickTheNameOnTheBanner
+
+//Function to click on the last name of the contact on any page on the form - NOTE: it wil click the first instance of the text found
+to handle ClickTheNameOnTheForm
+	Global TestDataType
+	WaitFor 40, Text: TestDataType,  ValidCharacters:"*",TextDifference:2,searchrectangle:((20,240),(1000,1000))	
+	Repeat until ImageFound(text: "General", ValidCharacters:"*", waitFor:5)
+		if the repeatIndex > 6 then Throw "Unable to go back to the contact page from the From" 
+		Click (Text: TestDataType,  ValidCharacters:"*",TextDifference:2,searchrectangle:((20,240),(1000,1000)),waitFor: 10)
+	End repeat	
+	WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	wait 3
+	Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 40)
+	wait 1
+end ClickTheNameOnTheForm
+
+//Function to click on the name of the Employer on any page - NOTE: it wil click the first instance of the text found
+to handle ClickOnTheEmployerName
+	global  EmployersName
+	Click (Text: EmployersName,TextDifference:1, waitFor:10)
+	WaitFor 40, text:"Employment details"	
+end ClickOnTheEmployerName
+
+//Function to click on the name of the any org on any page - NOTE: it wil click the first instance of the text found
+to handle ClickOnTheOrgName with OrgName
+	Click (Text: OrgName,TextDifference:1, waitFor:10)
+	WaitFor 40, text:"General"	
+end ClickOnTheOrgName
+
+// Function to confirm if the prog reg has comethrough and it refreshes the screen every 30 secs for a maximum of 6mins
+to handle ConfirmProgRegPayload with ProgRegName
+	repeat until ImageFound(Text: ProgRegName,TextDifference:1, waitFor:30)	
+		if the repeatIndex > 12 then Throw "Prog Reg Payload hasnt come through to CRM" 
+		TypeText F5
+		wait 5
+	end repeat	
+end ConfirmProgRegPayload
+
+// Function to Double click on a any prog reg on the contact page
+to handle DoubleClickOnProgReg with ProgRegName
+	DoubleClick (Text: ProgRegName,TextDifference:1, waitFor:30)
+	WaitFor 40, text:"Programme Registration"	
+end DoubleClickOnProgReg
+
+//Function to change the view from Active to ALL on the Order view page
+to handle ClickOnAllFromActiveOnOrderAssociatedView
+	Click (Text: "Active", waitFor: 10)
+	Click (Text: "All", waitFor: 10)
+	Click (Text: "Date Received", waitFor: 10)
+	wait 3
+	Click (Text: "Date Received", waitFor: 10)
+end ClickOnAllFromActiveOnOrderAssociatedView
+
+// Function to go back to the previous page
+to handle NavigateToThePreviousPage
+	TypeText altKey,leftArrow
+	WaitFor 40,"CRM/CommonObjects/Wait_For_object_On_Any_Page"
+end NavigateToThePreviousPage
+
+//Function to Click on text boxes and enter the desired value
+to handle CRM_TextBoxes Label,Data,dropdown
+	put imagelocation(text:label,ValidCharacters:"*", TextDifference:0,caseSensitive: On,waitfor:20)+(-150,-50) into TL
+	put imagelocation(text:label,ValidCharacters:"*",TextDifference:0,caseSensitive: On,waitfor:20)+(600,120) into BR 
+	Log TL && BR
+	Click imagelocation(text:label,waitfor:20,ValidCharacters:"*",TextDifference:0,caseSensitive: On,searchrectangle:(TL,BR))+(150,0)
+	wait 1
+	//typetext controlKey,"a"
+	if Data contains "MIP Employment" then
+		typetext controlKey,"a"
+		typetext Data
+	else
+		typetext Data
+	End if
+	//typetext Data
+	If dropdown = "Enter" then
+		wait 1
+		Typetext returnKey
+		wait 1
+		set the SearchRectangle to (TL,BR)
+		WaitFor 40, (text:"0"), (text:"1"),(text:"2"),(text:"3"),(text:"4"),(text:"5"),(text:"6"),(text:"7"),(text:"8"),(text:"9")
+		set the SearchRectangle to ()
+		wait 1
+		Typetext returnKey
+		wait 1		
+	End IF
+end CRM_TextBoxes
+
+//Function to Select the desired value from dropdown
+to handle CRM_Dropdown Label,Data
+	
+	put imagelocation(text:label,ValidCharacters:"*",TextDifference:0,caseSensitive: On,waitfor:20)+(-150,-50) into TL
+	put imagelocation(text:label,ValidCharacters:"*",TextDifference:0,caseSensitive: On,waitfor:20)+(600,120) into BR 
+	Log TL && BR
+	Click imagelocation(text:label,waitfor:20,ValidCharacters:"*",TextDifference:0,caseSensitive: On,searchrectangle:(TL,BR))+(150,0)
+	if ImageFound(text:Data,searchrectangle:(TL,BR), caseSensitive:On,waitFor:3) then
+		Click (text:Data,searchrectangle:(TL,BR),caseSensitive:On,waitfor:20)
+	Else 
+		repeat until imagefound(Text: Data,ValidCharacters:"*",TextDifference:0,searchrectangle:(TL,BR),caseSensitive:On,waitFor:2) 
+			if the repeatIndex > 10 then Throw "Text not found" 
+			ScrollWheelDown 1 //Scrolls 4 increments		
+			wait 1 //Waits 1 second to allow the UI to settle before searching for "NewAddress"		
+		end repeat
+		Click (text:Data,ValidCharacters:"*",TextDifference:0,searchrectangle:(TL,BR),caseSensitive:On,waitfor:20)
+	end if	
+	
+end CRM_Dropdown
+
+
+
+
+
+
+
+
+
+
+
+

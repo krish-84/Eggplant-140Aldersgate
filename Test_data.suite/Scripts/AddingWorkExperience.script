@@ -1,0 +1,25 @@
+﻿
+Params CompType , Comp
+
+
+Click (Text: "ADD NEW WORK", caseSensitive: On, waitFor: 40)
+WaitFor 40, text:"Duties",ValidCharacters:"*"
+wait 2
+Click text:"Competency",ValidCharacters:"*", waitFor:40
+wait 2
+WaitFor 40, text:"Competency Type"
+wait 1
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Competency Type", CompType
+set the SearchRectangle to (ScreenPart("VerticalMiddle"))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Competency", Comp
+set the SearchRectangle to ()
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Percentage of Time", "50% or more"
+set the SearchRectangle to (ScreenPart("TopLeftQuadrant"))
+Run "CommonCRMFunctions" 's CRM_Dropdown "Status", "Competent"
+set the SearchRectangle to ()
+wait 3
+Click (Text: "CLOSE",ValidCharacters:"*", caseSensitive: On, waitFor: 40)
+wait 2
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 2

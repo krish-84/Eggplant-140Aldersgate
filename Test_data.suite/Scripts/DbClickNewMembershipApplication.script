@@ -1,0 +1,19 @@
+﻿
+WaitFor 40, text:"Membership Application Associated View"
+
+wait 2
+
+put imagelocation(text:"Application Status",waitfor:20)+(-121,-90) into TL
+put imagelocation(text:"Application Status",waitfor:20)+(125,400) into BR
+
+repeat until imagefound (Text:"New", searchrectangle:(TL,BR),waitFor: 5)
+	if the repeatIndex > 15 then Throw "Image not found" 
+	Click (Text: "Application Status", caseSensitive: On, waitFor: 5)	
+end repeat
+
+DoubleClick (Text: "New" ,searchrectangle:(TL,BR) , waitFor:10)
+
+WaitFor 40, text:"Application Details"
+
+
+

@@ -1,0 +1,30 @@
+﻿Params ProgTP
+
+Click (Text: "ADD NEW PROG", caseSensitive: On, waitFor: 20)
+
+WaitFor 20, text:"Invoice"
+
+wait 5
+
+Set the SearchRectangle to ((15,249),(940,650))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Programme", "AAT Accounting Qualifications 2016", "Enter"
+set the SearchRectangle to ()
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Start Level", "AAT Foundation Certificate in Accounting - Level 2", "Enter"
+
+Set the SearchRectangle to (ScreenPart("LeftHalf"))
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Current Level", "AAT Access", "Enter"
+set the SearchRectangle to ()
+
+//Run "CommonCRMFunctions" 's CRM_TextBoxes "Current Level", "AAT Foundation Certificate in Accounting - Level 2", "Enter" --Need to ask farzad to unlock the field
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Training Provider", ProgTP , "Enter"
+
+Click text:"Invoice", ValidCharacters:"*",waitFor:20
+
+Run "CommonCRMFunctions" 's CRM_Dropdown "Funding Type - St", "Student"
+
+Click (Text: "CLOSE", caseSensitive: On, waitFor: 20)
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 5

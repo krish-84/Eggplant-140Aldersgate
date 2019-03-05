@@ -1,0 +1,66 @@
+﻿
+Params FirstName, LastName, Email
+
+
+//Function to Create a Contact with Dynamic LastName and Dynamic Email address
+wait 2
+Repeat until ImageFound(Text: "Contacts",searchRectangle:ScreenPart("HorizontalMiddle"), waitFor:5)
+	Click (ImageName:"CRM/CommonObjects/Sales_Entity", waitFor:5)
+End repeat
+
+Click (Text: "Contacts",searchRectangle:ScreenPart("HorizontalMiddle"), waitFor:20)
+WaitFor 30, text: "NEW", caseSensitive: On
+wait 3
+repeat until imagefound (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+	if the repeatIndex > 15 then Throw "Image not found" 
+	Click (Text: "NEW", caseSensitive: On, waitFor: 40)	
+end repeat
+(*Click (Text: "NEW", caseSensitive: On, waitFor: 40)
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))*)
+wait 3
+
+repeat until imagefound(Text: "Mr",searchrectangle:(ScreenPart("TopLeftQuadrant")),caseSensitive:On,waitFor:2) 
+	if the repeatIndex > 8 then Throw "CRM page not loaded" 
+	Click (Text: "Title", waitFor: 10)
+	wait 1 //Waits 1 second to allow the UI to settle	
+end repeat
+Click (Text: "Mr", waitFor: 30)
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "First Name", FirstName
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Last Name", Lastname
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Date of Birth", "14/12/1980"
+Run "CommonCRMFunctions" 's CRM_Dropdown "Gender", "Male"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Country", "United Kingdom", "Enter"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Post Code", "SE10 9LE"
+TypeText returnKey
+if ImageFound(text:"Ok", waitFor:15) then
+	TypeText returnKey
+	TypeText escapeKey
+end if
+
+Repeat until ImageFound(text:"Other Designatory", validCharacters:"*", validWords:"*", waitFor:5)
+	if the repeatIndex > 5 then Throw "Unable to create a contact" 
+	TypeText escapeKey
+	wait 1
+End repeat
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Address Line 1", "2 Old Pearson Street"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Town / City", "LONDON"
+Run "CommonCRMFunctions" 's CRM_TextBoxes "County", "Central"
+
+Repeat until ImageFound(text:"Other Designatory", validCharacters:"*", validWords:"*", waitFor:5)
+	if the repeatIndex > 5 then Throw "Unable to create a contact" 
+	TypeText escapeKey
+	wait 1
+End repeat
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Email", Email
+
+wait 1
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 40)
+wait 2
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+WaitFor 30, text: "DELETE", caseSensitive: On
+
+wait 3

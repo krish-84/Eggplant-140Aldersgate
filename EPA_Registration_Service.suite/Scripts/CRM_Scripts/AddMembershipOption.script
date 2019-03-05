@@ -1,0 +1,16 @@
+﻿
+WaitFor 20, text:"ADD MEMBERSHIP OPTION", caseSensitive: On
+
+wait 3
+
+Click (Text: "ADD MEMBERSHIP OPTION", caseSensitive: On, waitFor: 20)
+
+WaitFor 30, text:"Next",searchRectangle:ScreenPart("RightHalf")
+
+Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+Click (Text:"Finish",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+

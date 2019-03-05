@@ -1,0 +1,33 @@
+﻿
+
+Click (Text: "ADD NEW EMPLOYMENT", caseSensitive: On, waitFor: 40)
+
+WaitFor 40, text:"Employment Details"
+
+wait 2
+
+Click text:"Website", waitFor:20
+
+wait 3
+
+WaitFor 40, text:"Employment Details"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Organisation", "QAemployer.2", "Enter"
+
+Click text:"Self Employed", ValidCharacters:"*",waitFor:10
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 40)
+
+wait 2
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+
+
+
+
+
+
+
+
+

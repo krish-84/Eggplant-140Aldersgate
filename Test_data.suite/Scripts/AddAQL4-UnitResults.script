@@ -1,0 +1,65 @@
+﻿
+
+Click (Text: "ADD NEW UNIT RESULT", caseSensitive: On, waitFor: 40)
+
+WaitFor 40, text:"New Unit Result"
+
+wait 2
+
+Click text:"BTL",ValidCharacters:"*", waitFor:20
+
+wait 3
+
+WaitFor 40, text:"New Unit Result"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Learning Area", "AAT Professional Diploma in Accounting - Level 4", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Date of Result", today - 2 day
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Date of Assessment", today - 2 day
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Training Provider (S", "QAorg.10", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Training Provider (R", "QAorg.10", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Result Source", "CBT", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_Dropdown "Internal Verificat", "Approved"
+
+Set the SearchRectangle to ((40,445),(660,560))
+Run "CommonCRMFunctions" 's CRM_Dropdown "Result", "Competent"
+set the SearchRectangle to ()
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Method of Assess", "AAT Assessment", "Enter"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Actual Result", "Pass"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Grade", "Pass"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Percentage", "80"
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Source Percentage", "80"
+
+Click text:"Run Result Mani", waitFor:5
+
+Click (Text: "CLOSE", ValidCharacters:"*",caseSensitive: On, waitFor: 40)
+
+wait 3
+
+Repeat until not ImageFound (Text: "CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor: 1)
+	if the repeatIndex > 6 then Throw "Unable to close the form" 
+	wait 2
+	if ImageFound(text:"CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor:1) then Click (Text: "CLOSE", ValidCharacters:"*", caseSensitive: On, waitFor: 1)
+	wait 3
+End repeat
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+Run "CommonCRMFunctions" 's ClickTheNameOnTheBanner 
+
+WaitFor 40, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+wait 1
+
+
+

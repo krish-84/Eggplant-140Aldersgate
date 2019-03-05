@@ -1,0 +1,124 @@
+﻿
+// Function to launch a borwser
+to handle LaunchBrowserWithURL with browser,url
+	//Quitting all the iexplorer if any
+	(*TypeText  controlKey, shiftKey, escapeKey	
+	put imagelocation(text:"Windows Task Manager",ValidCharacters:"*",TextDifference:0,caseSensitive: On,waitfor:20)+(-150,-50) into TL
+	put imagelocation(text:"Windows Task Manager",ValidCharacters:"*",TextDifference:0,caseSensitive: On,waitfor:20)+(600,120) into BR 
+	Log TL && BR
+	click (Text: "Proce",validCharacters:"*",searchrectangle:(TL,BR), waitFor: 20)
+	if browser contains "iexplore" then
+		if ImageFound(Text: "explore.exe", WaitFor: 1) then
+			Repeat until not  ImageFound(Text: "iexplore.exe", WaitFor: 1)			
+				if ImageFound(Text: "iexplore.exe", WaitFor: 1) then				
+					click (Text: "iexplore.exe", WaitFor: 1)
+					TypeText tabKey
+					TypeText tabKey
+					TypeText tabKey
+					TypeText spacebar
+					//wait 2
+					if ImageFound("Do you want to", validCharacters:"*",validWords:"*", waitFor:30) then 
+						TypeText spacebar
+					end if
+					Wait until not ImageFound(text:"Cancel", waitFor:1)
+					Wait until not ImageFound(text:"Do you want to", validCharacters:"*" ,validWords:"*", waitFor:1)
+					wait 3
+				end if
+			End repeat			
+		end if
+	End if
+	if browser contains "chrome" then
+		if ImageFound(Text: "chrome.exe", WaitFor: 1) then
+			Repeat until not  ImageFound(Text: "chrome.exe", WaitFor: 1)			
+				if ImageFound(Text: "chrome.exe", WaitFor: 1) then				
+					click (Text: "chrome.exe", WaitFor: 1)
+					TypeText tabKey
+					TypeText tabKey
+					TypeText tabKey
+					TypeText spacebar
+					//wait 2
+					if ImageFound("Do you want to", validCharacters:"*",validWords:"*", waitFor:30) then 
+						TypeText spacebar
+					end if
+					Wait until not ImageFound(text:"Cancel", waitFor:1)
+					Wait until not ImageFound(text:"Do you want to", validCharacters:"*" ,validWords:"*", waitFor:1)
+					wait 3
+				end if
+			End repeat			
+		end if
+	End if
+	if browser contains "firefox" then
+		if ImageFound(Text: "firefox.exe", WaitFor: 1) then
+			Repeat until not  ImageFound(Text: "firefox.exe", WaitFor: 1)			
+				if ImageFound(Text: "firefox.exe", WaitFor: 1) then				
+					click (Text: "firefox.exe", WaitFor: 1)
+					TypeText tabKey
+					TypeText tabKey
+					TypeText tabKey
+					TypeText spacebar
+					//wait 2
+					if ImageFound("Do you want to", validCharacters:"*",validWords:"*", waitFor:30) then 
+						TypeText spacebar
+					end if
+					Wait until not ImageFound(text:"Cancel", waitFor:1)
+					Wait until not ImageFound(text:"Do you want to", validCharacters:"*" ,validWords:"*", waitFor:1)
+					wait 3
+				end if
+			End repeat			
+		end if
+	End if
+	
+	TypeText escapeKey
+*)
+	//Opening the browser
+	Set CRMPassword to "--Gue55Wh3"
+	TypeText  windowsKey,"r"
+	TypeText  browser&& url,return
+	//waitfor 20,"CommonBrowserObjects/IE_Browser/refreshBTN"
+	//wait 2
+	if browser contains "explore" then
+		if ImageFound(imageName: "CommonBrowserObjects/IE_Browser/MaximiseIEbrowser", waitFor: 1) then 
+			Click "CommonBrowserObjects/IE_Browser/MaximiseIEbrowser"
+		end if
+	End if
+	//wait 5
+	if url contains "crm" then
+		if imageFound(imageName:"CRM/CommonObjects/CredentialsPopUp", waitFor:5) then 
+			Click "CRM/CommonObjects/CredentialsPopUp"
+			TypeText CRMPassword
+			Click (Text: "OK")		
+		end if
+	End if
+	if imageFound(text: "Continue", waitFor:5) then 
+		Click (Text: "Continue")		
+	end if
+	if url contains "uat-web.aws" then
+		Repeat until ImageFound(text:"Forgotten your password",validCharacters:"*", validWords:"*", waitFor:5) 
+			if the repeatIndex > 10 then Throw "Unable to load the login page"
+			TypeText controlKey,l
+			// entering log out url
+			TypeText "https://uat-web.aws.aat.org.uk/login?destination=/user/logout"
+			TypeText  returnKey	
+			wait 2
+			// making sure user is logged out by entering home page url
+			TypeText controlKey,l
+			TypeText "https://uat-web.aws.aat.org.uk/Login"
+			TypeText  returnKey	
+			wait 1
+		End repeat
+	end if
+	TypeText controlKey,l
+	TypeText url
+	TypeText  returnKey	
+	wait 1
+end LaunchBrowserWithURL
+
+// Function for closing the current browser
+to handle CloseBrowser
+	wait 2
+	TypeText altKey,F4	
+	if ImageFound(text:"this page", validCharacters:"*", validWords:"*", waitFor:5) then 
+		TypeText returnKey
+		wait 1
+	end if
+end CloseBrowser

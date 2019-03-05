@@ -1,0 +1,22 @@
+﻿
+WaitFor 30, text:"News"
+
+// short cut key to go to address bar
+Repeat until ImageFound(image:"WEB/HomePage/Email_Field", waitFor:5)
+	TypeText controlKey,l
+	// entering log out url
+	TypeText "https://uat-web.aws.aat.org.uk/login?destination=/user/logout"
+	TypeText  returnKey	
+	wait 2
+	// making sure user is logged out by entering home page url
+	TypeText controlKey,l
+	TypeText "https://uat-web.aws.aat.org.uk/Login"
+	TypeText  returnKey	
+	wait 3
+End repeat
+
+WaitFor 30, text:"News"
+// verifying that user is logged out
+WaitFor 10, "WEB/HomePage/Email_Field"
+wait 3
+

@@ -1,0 +1,81 @@
+﻿Try
+	
+	Set TPmainContact to "50007123@aat-test.org.uk"
+	Set EPACentreContact to "50007124@aat-test.org.uk"
+	Set ExamsOfficer to "50007125@aat-test.org.uk"
+	Set ISAContact to "50007126@aat-test.org.uk"
+	
+	Set CentreName to "EPAKRISH"
+	
+	//EPA-39.1
+	Log "Test case ID: EPA-39.1 - As a TP main Contact I should be able to access the service"
+	//Launching IE and access UAT WEB
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk" //Launching WEB 
+	//Making sure the user is logged out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	//Loggin in as Tp main Contact
+	Run "EPA_Service_Journey/LoginToTheService" TPmainContact
+	//Choosing a Centre 
+	Run "EPA_Service_Journey/DrupalCentrePicker" CentreName
+	//Accessing the Service
+	Run "EPA_Service_Journey/AccessingTheService"
+	//Verifying that TP can see the Select Students page
+	If ImageFound(text:"Select students to register", waitFor:20) then LogSuccess "EPA-39.1: PASS - TP main Contact is able to access the Service " else LogError "EPA-39.1: FAIL - TP main Contact is NOT able to access the Service"
+	//Logging the user out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	
+	//EPA-39.2
+	Log "Test case ID: EPA-39.2 - As an EPA Centre Contact I should be able to access the service"
+	//Loggin in as EPA Centre Contact
+	//Making sure the user is logged out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	Run "EPA_Service_Journey/LoginToTheService" EPACentreContact
+	//Choosing a Centre 
+	Run "EPA_Service_Journey/DrupalCentrePicker" CentreName
+	//Accessing the Service
+	Run "EPA_Service_Journey/AccessingTheService"
+	//Verifying that EPA Centre contact can see the Select Students page
+	If ImageFound(text:"Select students to register", waitFor:20) then LogSuccess "EPA-39.2: PASS - EPA Centre Contact is able to access the Service " else LogError "EPA-39.2: FAIL - EPA Centre Contact is NOT able to access the Service"
+	//Logging the user out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	
+	//EPA-39.3
+	Log "Test case ID: EPA-39.3 - As an Exams Officer Contact I should be able to access the service"
+	//Loggin in as Exams Officer Contact
+	//Making sure the user is logged out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	Run "EPA_Service_Journey/LoginToTheService" ExamsOfficer
+	//Choosing a Centre 
+	Run "EPA_Service_Journey/DrupalCentrePicker" CentreName
+	//Accessing the Service
+	Run "EPA_Service_Journey/AccessingTheService"
+	//Verifying that Exams Officer can see the Select Students page
+	If ImageFound(text:"Select students to register", waitFor:20) then LogSuccess "EPA-39.3: PASS - Exams Officer Contact is able to access the Service " else LogError "EPA-39.3: FAIL - Exams Officer Contact is NOT able to access the Service"
+	//Logging the user out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	
+	//EPA-40.1
+	Log "Test case ID: EPA-40.1 - As an ISA Contact I should NOT be able to access the service"
+	//Loggin in as ISA Contact
+	//Making sure the user is logged out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	Run "EPA_Service_Journey/LoginToTheService" ISAContact
+	//Choosing a Centre 
+	Run "EPA_Service_Journey/DrupalCentrePicker" CentreName
+	//Verifying that ISA Contact cannot see the EPA Registration link
+	If ImageFound(text:"EPA registration", waitFor:10) then LogError "EPA-40.1: FAIL - ISA Contact is able to access the Service " else LogSuccess "EPA-40.1: PASS - ISA Contact is NOT able to access the Service"  
+	//Logging the user out of the service 
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	
+	// Closing the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	Catch exception
+	CaptureScreen	
+	put the result
+	Run "CommonBrowserFunctions" 's CloseBrowser	
+	throw exception
+	
+End try
+
+

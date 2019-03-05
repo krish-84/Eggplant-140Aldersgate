@@ -1,0 +1,50 @@
+﻿
+global LastName
+
+Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Subscription"
+
+WaitFor 40, text:"Subscription Associated View"
+
+click (text: "Subscription End Date", validCharacters: "*", waitFor: 20)
+wait 1
+click (text: "Subscription End Date", validCharacters: "*", waitFor: 20)
+
+DoubleClick text:"Active", waitFor:20
+
+WaitFor 40, text:"Renewal Request", validCharacters: "*"
+
+wait 2
+
+click (text: "Source" , validCharacters:"*", waitFor: 20)
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Subscription Start Da", today - 2 day
+
+Run "CommonCRMFunctions" 's CRM_TextBoxes "Subscription End Da", today - 2 day
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+
+WaitFor 20, (Image:"CRM/CommonObjects/Stable_Saved_Icon",SearchRectangle: (ScreenPart("BottomRightQuadrant")))
+
+click (Image: "CRM/CommonObjects/Three_Dots")
+
+click (text: "Start Dialog" , validCharacters:"*", waitFor: 20)
+
+Click (Text: "Add",searchRectangle:ScreenPart("VerticalMiddle"), waitFor:20)
+
+click (text: "Yes", validCharacters:"*", waitFor: 40)
+
+Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+WaitFor 40, text:"reason for the Lapse", validCharacters:"*"
+
+Click (Text:"Next",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+Click (Text:"Finish",searchRectangle:ScreenPart("RightHalf"), waitFor:30)
+
+Run "CommonCRMFunctions" 's ClickTheNameOnTheForm 
+
+Click (Text:"SAVE", caseSensitive: On, searchrectangle:((0,0), (80,150)), waitFor: 20)
+
+WaitFor 40, text:"Lapsed", validCharacters:"*"
+
+wait 1

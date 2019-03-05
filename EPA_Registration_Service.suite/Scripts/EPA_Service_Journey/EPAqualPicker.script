@@ -1,0 +1,7 @@
+﻿Params QualName
+
+//Clicking on the qual dropdown
+Click (Text: "Please select qualification level", waitFor: 10)
+// Choosing the qual as per the test
+Click (Text: QualName, waitFor:10)
+wait 3

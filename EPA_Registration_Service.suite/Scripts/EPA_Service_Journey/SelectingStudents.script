@@ -1,0 +1,73 @@
+﻿
+
+global ApprenticeshipStartDate
+global DateOfPortfolioSubmission
+global StudentMemberID
+global StudentLastName
+
+//Generating dynamic apprenticeship start date
+Put today's day into date
+put (date-1) into ApprenticeshipStartDate
+If ApprenticeshipStartDate is between 1 and 9 then 
+	set ApprenticeshipStartDate to "0"&ApprenticeshipStartDate
+Else if ApprenticeshipStartDate  is between 17 and 21 then	
+	set ApprenticeshipStartDate to ApprenticeshipStartDate-6
+Else if ApprenticeshipStartDate = 0 then
+	set ApprenticeshipStartDate to "01"
+Else
+	set ApprenticeshipStartDate to ApprenticeshipStartDate
+End if
+Log ApprenticeshipStartDate
+
+//Generating dynamic Portfolio submission date
+put today + 31 days into a
+Put a's monthName into tempDateOfPortfolioSubmission
+Put trim(tempDateOfPortfolioSubmission) into DateOfPortfolioSubmission
+log DateOfPortfolioSubmission
+
+WaitFor 60, text:"Add your ULN number" --waiting for the students to load
+
+// Reading adn storing the member ID of the Student who is being registered 
+Put ReadText("WEB/SelectStudentsPage/Member_ID_Field") into StudentMemberID
+Log StudentMemberID
+// Reading and storing the Last name of the student
+Put ReadText("WEB/SelectStudentsPage/Student_Name_Field") into StudentName
+Put the last word of StudentName into StudentLastName
+Log StudentLastName
+
+//Clicking the ULN Field
+Click (imageName: "WEB/SelectStudentsPage/ULN_Field", waitFor:10)
+//Entering a random ULN
+TypeText "1234567890"
+// Clicking start date field
+Click (imageName: "WEB/SelectStudentsPage/Start_data_field", waitFor:10)
+// clicking on a past date
+put imagelocation(text:"Apprenticeship Start Date",waitfor:20)+(-91,100) into TL
+put imagelocation(text:"Apprenticeship Start Date",waitfor:20)+(125,400) into BR
+Click (Text: ApprenticeshipStartDate ,validPattern: "[0-9]+",searchrectangle:(TL,BR) , waitFor:10)
+// Clicking end date field
+Click (imageName: "WEB/SelectStudentsPage/End_date_Field", waitFor: 10)
+// If current month is december then go to next year then select next month
+If today's monthName = "December" then
+	Click (Image: "WEB/SelectStudentsPage/Next_Year_portfolio_endData_field", waitFor:10)
+End if
+// Clicking the end date / month
+//put "March" into DateOfPortfolioSubmission
+put imagelocation(text:"ETA date of portfolio",waitfor:20)+(-150,5) into TL
+put imagelocation(text:"ETA date of portfolio",waitfor:20)+(300,500) into BR
+Click (Text:  DateOfPortfolioSubmission ,ValidCharacters:"*",Contrast:"Off", DPI:"72", EnableAggressiveTextExtraction:"Yes", EnhanceLocalContrast:"Yes",TextDifference:1, ValidWords:"*", IgnoreSpaces:YES, searchRectangle:(TL,BR) , waitFor:10)
+
+// Selecting the student for whom we have entered the details
+Click (Text:StudentLastName, WaitFor:10 )
+repeat until imagefound(1,image: "WEB/SelectStudentsPage/Unchecked_Checkbox") 	
+	if the repeatIndex > 15 then Throw "Image not found" 
+	TypeText leftArrow
+	wait 1 	
+end repeat	
+Click (imageName:"WEB/SelectStudentsPage/Unchecked_Checkbox", waitFor:10)
+// Scrolling down
+Click (50,600) //clicking outside of the iframe
+Run "CommonBrowserFunctions" 's ScrollDownuntilImage "WEB/SelectStudentsPage/Next_Button"
+// clicking next button
+Click "WEB/SelectStudentsPage/Next_Button"
+

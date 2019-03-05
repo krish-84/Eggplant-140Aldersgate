@@ -1,0 +1,42 @@
+﻿
+Params TPName
+
+global TPpaymentCode
+
+WaitFor 40, text:"Choose your centre"
+
+click (Text: "Please select from the list", waitFor: 40)
+
+click (Text: "QAorg.1",validCharacters:"*" , waitFor: 20)
+
+WaitFor 40, text:"Generate payment code"
+
+wait 2
+
+WaitFor 40, text:"Generate payment code"
+
+click (text: "Generate payment code", waitFor: 20)
+
+WaitFor 40, text:"Payment code generator"
+
+wait 1
+
+Run "CommonWebFunctions" 's TextBoxes "Number of codes required" , "1"
+
+set the SearchRectangle to (ScreenPart("LeftHalf"))
+Run "CommonWebFunctions" 's TextBoxes "Purchase order number" , "AutomationCode"
+set the SearchRectangle to ()
+
+click (text: "Generate codes", validCharacters:"*", waitFor:10)
+
+WaitFor 40, text:"new payment codes"
+
+wait 2
+
+put imagelocation(text:"Create new",ValidCharacters:"*", TextDifference:0,caseSensitive: On,waitfor:20) into TL
+put imagelocation(text:"codes cost",ValidCharacters:"*",TextDifference:0,caseSensitive: On,waitfor:20) into BR 
+
+Set TPpaymentCode to trimAll(ReadText(ImageLocation(text:"Payment code", caseSensitive:YES,trim:on,searchrectangle:(TL,BR),waitFor:10)+(0,20)))
+log TPpaymentCode
+
+

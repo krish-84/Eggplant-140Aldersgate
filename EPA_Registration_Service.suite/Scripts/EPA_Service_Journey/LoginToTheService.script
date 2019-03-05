@@ -1,0 +1,28 @@
+﻿
+Params Login
+//Clicking on the Login button on the home page
+//Click (Text:"Log in", waitFor:20)
+// If not clicked properly then click again (this happens owing to website glitch)
+
+(*repeat until imagefound (ImageName:"WEB/HomePage/Email_Field", waitFor:10)
+	if the repeatIndex > 5 then Throw "Login page not found" 
+	Click (Text: "Log in", waitFor:20)	
+end repeat*)
+
+// click on the email field
+click (ImageName:"WEB/HomePage/Email_Field", waitFor:10)
+//Entering Username
+Typetext Login	
+TypeText tabKey	
+//Entering Password
+TypeText "--Gue55Wh0"	
+TypeText tabKey
+TypeText tabKey
+TypeText tabKey
+//Clicking Login to MyAAT
+TypeText spacebar
+
+wait 2
+//skipping verification if prompted
+if ImageFound(Text: "Remind me next time I log in", waitFor: 3) then click (Text: "Remind me next time I log in")
+wait 2

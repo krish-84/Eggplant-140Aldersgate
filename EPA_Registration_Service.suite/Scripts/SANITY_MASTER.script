@@ -1,0 +1,141 @@
+﻿Try
+	
+	global StudentMemberID
+	
+	global StudentLastName
+	
+	global EmployersName
+	
+	global ERN
+	
+	global POnumber
+	
+	global ApprenticeshipStartDate
+	
+	global CentreName
+	
+	
+	Set EPA_L3 to "AAT Assistant Accountant End Point Assessment"
+	Set TPmainContact to "50007123@aat-test.org.uk"
+	Set CentreName to "EPAKRISH"
+	
+	//EPA-41
+	Log "Test case ID: EPA-41 - To Verify that a TPmainContact is able to submit a registration for a student on EPA L3"
+	//Launching IE and accessing UAT WEB
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","https://uat-web.aws.aat.org.uk" //Launching UAT WEB 
+	//Making sure the user is logged out of the service
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	//Loggin in as Tp main Contact
+	Run "EPA_Service_Journey/LoginToTheService" TPmainContact
+	//Choosing a Centre 
+	Run "EPA_Service_Journey/DrupalCentrePicker" CentreName
+	//Accessing the Service
+	Run "EPA_Service_Journey/AccessingTheService"
+	//Making sure the EPA centre picker shows the same centre as what was choosen on DRUPAL centre picker
+	Run "EPA_Service_Journey/EPAcentrePicker" CentreName
+	//Choosing EPA L3 Qualification
+	Run "EPA_Service_Journey/EPAqualPicker" EPA_L3
+	//Selecting the first eligible student and entering ERN, Start and end date and storing the Member ID of the selected student
+	Run "EPA_Service_Journey/SelectingStudents"
+	Log StudentMemberID
+	// Entering NEW employer details
+	Run "EPA_Service_Journey/InputEmployerDetails"
+	Log EmployersName
+	Log ERN
+	//Confirrmation and payment page
+	
+	//***Verifying that user is not able to submit without agressing to the declaration and entering the PO number
+	Run "CommonBrowserFunctions" 's ScrollDownuntilImage "WEB/ConfirmationAndPaymentPage/Disabled_Submit_Button"
+	If ImageFound(imageName:"WEB/ConfirmationAndPaymentPage/Disabled_Submit_Button", waitFor:10) then LogSuccess "PASS: EPA-41.1 - User is NOT able to submit the applicatio without agreeing to the declaration and entering the PO number" Else LogError "FAIL: EPA-41.1 - User is ABLE to submit the applicatio without agreeing to the declaration and entering the PO number "
+	//***Verifying that the user is quoted the correct fees
+	IF (ImageFound(text:"550", waitFor:10)) then LogSuccess "PASS: EPA-41.2 User is shown the correct fees" Else LogError "FAIL: EPA-41.2 User is NOT shown the correct fees"
+
+	//Agreeing to the declaration and entering the POnumber and submitting the applcation
+	Run "EPA_Service_Journey/ConfirmationAndPayment"
+	
+	//***Verifying that the thank you page is displayed
+	If (ImageFound(text:"Registration complete", waitFor:20)) and If (ImageFound(text:"50007123@aat-test.org.uk", waitFor:20)) then LogSuccess "PASS: EPA-41.3  - User has successfully submitted the registration and User is shown confirmation of the submission"
+	else		LogError "FAIL: EPA-41.3  - User may not have successfully submitted the registration as User is NOT shown confirmation of the submission" &&  CaptureScreen (Name: "WEB Submit page")
+	
+	//Logging out the user
+	Run "EPA_Service_Journey/LogoutFromTheService"
+	//Closing the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	//EPA-44
+	Log "Test case ID: EPA-44 - To Verify that the EPA L3 registration comes through to CRM"
+	//Launching IE and accessing UAT CRM
+	Run "CommonBrowserFunctions" 's LaunchBrowserWithURL "iexplore","http://uatcrm.aat.org.uk/AAT/main.aspx" //Launching UAT CRM 
+	//Searching the Student that was registered on EPA-41
+	Run "CommonCRMFunctions" 's SearchByIDorName StudentMemberID
+	
+	//***Verifying that the Prog reg has come through to CRM
+	Run "CommonCRMFunctions" 's ConfirmProgRegPayload EPA_L3
+	If (ImageFound(text:EPA_L3, waitFor:20)) then LogSuccess "PASS: EPA-44.1 - EPA L3 prog reg has come through to CRM " else LogError "FAIL: EPA-44.1 - EPA L3 prog reg has NOT come through to CRM"
+
+	//Navigating to Additional ID entity
+	Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Additional IDs"
+	//***Verifying if the ULN has come through to CRM
+	If (ImageFound(Text: "1234567890" , waitFor:15)) then LogSuccess "PASS: EPA-44.2 - ULN has come through to CRM successfully" else LogError "FAIL: EPA-44.2 - ULN has NOT come through to CRM successfully"
+
+	// Going back to the contact page
+	Run "CommonCRMFunctions" 's ClickOnTheContactLastName
+	//Going in to the Prog Reg entity/page from the contact page
+	Run "CommonCRMFunctions" 's DoubleClickOnProgReg EPA_L3
+	//***Verifying if the training provider against the prog reg
+	If (ImageFound(Text: CentreName  , waitFor:15)) then LogSuccess "PASS: EPA-44.3 - Correct TP associated to the prog reg" else LogError "FAIL: EPA-44.3 - TP Name is NOT showing against the prog reg"
+	//***Verifying the Apprenticeship start date
+	If (ImageFound(Text: ApprenticeshipStartDate  , waitFor:15)) then LogSuccess "PASS: EPA-44.4 - Correct Apprentice Start date is showing against the prog reg" else LogError "FAIL: EPA-44.4 - InCorrect Apprentice Start date is showing against the prog reg"
+
+	//going to employer associated view by clicking to the Employer Field on the page
+	Run "CommonCRMFunctions" 's ClickOnTheEmployerName
+	//***Verifying the mentors name, mentors email and mentors phone number
+	If (ImageFound(Text: "AutomationLastName"  , waitFor:15)) and (ImageFound(Text: "Automation@automation.com"  , waitFor:15)) and (ImageFound(Text: "1324567890"  , waitFor:15))  then LogSuccess "PASS: EPA-44.5 - All Mentor details has come through to CRM successfully" else LogError "FAIL: EPA-44.5 -Some OR All Mentor details has NOT come through to CRM successfully"
+
+	// Going back to the contact page
+	Run "CommonCRMFunctions" 's NavigateToThePreviousPage CentreName
+	//Going to the Training Provider entity / page
+	Run "CommonCRMFunctions" 's ClickOnTheOrgName CentreName
+	//Navigate to Order Entity of the Employer
+	Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Orders"
+	// changing the view from Active to All and getting the latest order at the top
+	Run "CommonCRMFunctions" 's ClickOnAllFromActiveOnOrderAssociatedView
+	//***Verifying if the Order has come through
+	If (ImageFound(Text: StudentLastName  , waitFor:15)) then LogSuccess "PASS: EPA-44.6 - Order has come through to CRM successfully" else LogError "FAIL: EPA-44.6 - Order has NOT come through to CRM successfully"
+
+	// Going back to the contact page
+	Run "CommonCRMFunctions" 's ClickOnTheContactLastName 
+	// Navigating to the Employer Entity
+	Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Employment"
+	// Clicking on the Employer
+	Run "CommonCRMFunctions" 's ClickOnTheOrgName EmployersName
+	//Navigate to Additional Entity of the Employer
+	Run "CommonCRMFunctions" 's NavigateFromTopMenuTo "Additional IDs"
+	//***Verifying if the ERN has come through to CRM
+	If (ImageFound(Text: ERN  , waitFor:15)) then LogSuccess "PASS: EPA-44.7 - ERN has come through to CRM successfully" else LogError "FAIL: EPA-44.7 - ERN has NOT come through to CRM successfully"
+
+	//Closing the browser
+	Run "CommonBrowserFunctions" 's CloseBrowser
+	
+	Catch exception
+	CaptureScreen	
+	put the result
+	Run "CommonBrowserFunctions" 's CloseBrowser	
+	throw exception
+	
+End try
+
+
+
+
+
+
+
+
+
+
+
+
+
+
